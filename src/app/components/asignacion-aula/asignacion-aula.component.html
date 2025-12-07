@@ -1,0 +1,139 @@
+<div class="asignacion-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 class="welcome">¡Bienvenido/a, <span class="user-name">{{ currentUser }}</span>!</h1>
+    </div>
+
+    <div class="content-area">
+      <h2 class="page-title">ASIGNACION DE AULA</h2>
+
+      <div class="form-container">
+        <!-- Información Básica -->
+        <div class="form-section">
+          <div class="section-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="section-icon">
+              <path d="M10 10C12.7614 10 15 7.76142 15 5C15 2.23858 12.7614 0 10 0C7.23858 0 5 2.23858 5 5C5 7.76142 7.23858 10 10 10Z" fill="currentColor"/>
+              <path d="M10 12C5.58172 12 2 15.5817 2 20H18C18 15.5817 14.4183 12 10 12Z" fill="currentColor"/>
+            </svg>
+            <h3 class="section-title">Información Básica</h3>
+          </div>
+          
+          <div class="form-fields">
+            <div class="form-field">
+              <label>Nombre del Docente</label>
+              <input 
+                type="text" 
+                [(ngModel)]="nombreDocente"
+                placeholder="Ej: María Fernanda Cárdenas"
+                class="form-input">
+            </div>
+            
+            <div class="form-field">
+              <label>Nombre/ID del Aula</label>
+              <input 
+                type="text" 
+                [(ngModel)]="nombreAula"
+                placeholder="Ej: AULA-205 o Lab-Ingeniería"
+                class="form-input">
+            </div>
+          </div>
+        </div>
+
+        <!-- Recursos Físicos -->
+        <div class="form-section">
+          <div class="section-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="section-icon">
+              <rect x="2" y="2" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M6 6H14M6 10H14M6 14H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3 class="section-title">Recursos Físicos</h3>
+          </div>
+          
+          <div class="recursos-grid">
+            <!-- Sillas -->
+            <div class="recurso-card">
+              <div class="recurso-icon">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                  <path d="M8 12V24H24V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 12C8 8 10 6 16 6C22 6 24 8 24 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 24V28H22V24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 16H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="recurso-label">SILLAS</div>
+              <div class="recurso-controls">
+                <button class="control-btn" (click)="decrementarRecurso('sillas')">-</button>
+                <span class="recurso-count">{{ cantidadSillas }}</span>
+                <button class="control-btn" (click)="incrementarRecurso('sillas')">+</button>
+              </div>
+            </div>
+
+            <!-- Mesas -->
+            <div class="recurso-card">
+              <div class="recurso-icon">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                  <rect x="4" y="8" width="24" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M6 24H26M8 24V28H24V24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="recurso-label">MESAS</div>
+              <div class="recurso-controls">
+                <button class="control-btn" (click)="decrementarRecurso('mesas')">-</button>
+                <span class="recurso-count">{{ cantidadMesas }}</span>
+                <button class="control-btn" (click)="incrementarRecurso('mesas')">+</button>
+              </div>
+            </div>
+
+            <!-- Computadoras -->
+            <div class="recurso-card" [class.blocked]="!esLaboratorio">
+              <div class="recurso-icon" [class.disabled]="!esLaboratorio">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                  <rect x="4" y="6" width="24" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 22H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="14" y="24" width="4" height="2" rx="1" fill="currentColor"/>
+                </svg>
+                <div class="lock-overlay" *ngIf="!esLaboratorio">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M5 9V7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7V9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <rect x="3" y="9" width="14" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="recurso-label">COMPUTADORAS</div>
+              <div class="recurso-controls">
+                <button class="control-btn" 
+                        [disabled]="!esLaboratorio"
+                        (click)="decrementarRecurso('computadoras')">-</button>
+                <span class="recurso-count" [class.disabled]="!esLaboratorio">{{ cantidadComputadoras }}</span>
+                <button class="control-btn" 
+                        [disabled]="!esLaboratorio"
+                        (click)="incrementarRecurso('computadoras')">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toggle Laboratorio -->
+        <div class="form-section">
+          <div class="toggle-section">
+            <label class="toggle-label">¿El Aula es un Laboratorio?</label>
+            <div class="toggle-switch" (click)="toggleLaboratorio()" [class.active]="esLaboratorio">
+              <div class="toggle-slider"></div>
+            </div>
+            <span class="toggle-text">{{ esLaboratorio ? 'Sí' : 'No' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón Registrar -->
+      <div class="action-button-container">
+        <button class="btn-registrar" (click)="registrarAsignacion()">
+          Registrar Asignacion
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

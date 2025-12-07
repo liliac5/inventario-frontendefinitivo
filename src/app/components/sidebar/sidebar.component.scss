@@ -60,6 +60,33 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.user-info {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.user-name-sidebar {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+}
+
+.user-role {
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .sidebar-nav {

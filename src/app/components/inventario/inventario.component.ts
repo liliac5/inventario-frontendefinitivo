@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-interface Bien {
-  codigoInventario: string;
+interface Item {
+  codigo: string;
   nombre: string;
-  modelo: string;
-  estado: string;
-  fechaAdquisicion: string;
+  tipo: string;
   ubicacion: string;
+  estado: string;
 }
 
 @Component({
@@ -20,58 +19,116 @@ export class InventarioComponent implements OnInit {
   searchTerm: string = '';
   showAddModal: boolean = false;
   showDetailModal: boolean = false;
-  selectedBien: Bien | null = null;
+  selectedItem: Item | null = null;
   
-  bienes: Bien[] = [
-    { codigoInventario: 'PC001', nombre: 'Computadora Dell', modelo: 'PC001', estado: 'Operativo', fechaAdquisicion: '2025-05-22', ubicacion: 'Aula 16' },
-    { codigoInventario: 'PC001', nombre: 'Computadora Dell', modelo: 'PC001', estado: 'Operativo', fechaAdquisicion: '2025-05-22', ubicacion: 'Aula 16' },
-    { codigoInventario: 'PRO001', nombre: 'Proyector Epson', modelo: 'PC001', estado: 'Operativo', fechaAdquisicion: '2025-05-22', ubicacion: 'Aula 16' },
-    { codigoInventario: 'PRO002', nombre: 'Proyector Epson', modelo: 'PC001', estado: 'Operativo', fechaAdquisicion: '2025-05-22', ubicacion: 'Aula 16' },
-    { codigoInventario: 'PRO003', nombre: 'Proyector Epson', modelo: 'PC001', estado: 'Operativo', fechaAdquisicion: '2025-05-22', ubicacion: 'Aula 16' }
+  // Estadísticas
+  totalAulas: number = 15;
+  totalDocentes: number = 48;
+  totalBienes: number = 1250;
+  
+  items: Item[] = [
+    { codigo: 'A-101', nombre: 'Aula Magna (Cap. 100)', tipo: 'Aula', ubicacion: 'Edificio A, Planta Baja', estado: 'Operativo' },
+    { codigo: 'A-205', nombre: 'Laboratorio de Química', tipo: 'Aula', ubicacion: 'Edificio A, Nivel 2', estado: 'Operativo' },
+    { codigo: 'B-301', nombre: 'Aula Regular 301', tipo: 'Aula', ubicacion: 'Edificio B, Nivel 3', estado: 'Mantenimiento' },
+    { codigo: 'D0045', nombre: 'Dr. Javier Ruiz González', tipo: 'Docente', ubicacion: 'Ingeniería de Sistemas', estado: 'Titular' },
+    { codigo: 'D0098', nombre: 'Lic. Ana María Solano', tipo: 'Docente', ubicacion: 'Administración', estado: 'Asociado' },
+    { codigo: 'D0150', nombre: 'MSc. Carlos Varela', tipo: 'Docente', ubicacion: 'Matemáticas', estado: 'Contratado' },
+    { codigo: 'INV-123', nombre: 'Proyector Epson X3', tipo: 'Bienes', ubicacion: 'A-101', estado: 'Asignado' },
+    { codigo: 'INV-456', nombre: 'Silla de Oficina (Rodante)', tipo: 'Bienes', ubicacion: 'Almacén', estado: 'Disponible' }
   ];
 
-  filteredBienes: Bien[] = [];
+  filteredItems: Item[] = [];
 
-  // Formulario para nuevo bien
-  nuevoBien: Bien = {
-    codigoInventario: '',
+  // Formulario para nuevo elemento
+  nuevoItem: Item = {
+    codigo: '',
     nombre: '',
-    modelo: '',
-    estado: 'Operativo',
-    fechaAdquisicion: '',
-    ubicacion: 'Aula 101'
+    tipo: 'Bienes',
+    ubicacion: '',
+    estado: ''
   };
 
-  ubicaciones: string[] = ['Aula 101', 'Aula 16', 'Aula 20', 'Bodega', 'Laboratorio 1', 'Laboratorio 2'];
-  estados: string[] = ['Operativo', 'En Reparación', 'Fuera de Servicio', 'Disponible'];
+  tipos: string[] = ['Bienes', 'Aula', 'Docente'];
+  ubicaciones: string[] = ['Edificio A, Planta Baja', 'Edificio A, Nivel 2', 'Edificio B, Nivel 3', 'Almacén', 'Ingeniería de Sistemas', 'Administración', 'Matemáticas'];
+  estados: string[] = ['Operativo', 'Mantenimiento', 'Disponible', 'Asignado', 'Titular', 'Asociado', 'Contratado'];
+  
+  // Filtros
+  showFilterDropdown: boolean = false;
+  selectedFilter: string = 'Mostrar Todos';
+  filterOptions: string[] = [
+    'Mostrar Todos',
+    'Aulas / Laboratorios',
+    'Docentes',
+    'Bienes (Activos)',
+    'Mantenimiento',
+    'Titular',
+    'Asociado',
+    'Contratado',
+    'Asignado',
+    'Disponible'
+  ];
 
   ngOnInit(): void {
-    this.filteredBienes = [...this.bienes];
+    this.filteredItems = [...this.items];
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', (event: any) => {
+      if (!event.target.closest('.filter-dropdown-wrapper')) {
+        this.showFilterDropdown = false;
+      }
+    });
   }
 
   onSearch(): void {
-    if (!this.searchTerm.trim()) {
-      this.filteredBienes = [...this.bienes];
-      return;
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let filtered = [...this.items];
+
+    // Aplicar búsqueda
+    if (this.searchTerm.trim()) {
+      const term = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.codigo.toLowerCase().includes(term) ||
+        item.nombre.toLowerCase().includes(term) ||
+        item.tipo.toLowerCase().includes(term) ||
+        item.ubicacion.toLowerCase().includes(term)
+      );
     }
 
-    const term = this.searchTerm.toLowerCase();
-    this.filteredBienes = this.bienes.filter(bien =>
-      bien.codigoInventario.toLowerCase().includes(term) ||
-      bien.nombre.toLowerCase().includes(term) ||
-      bien.modelo.toLowerCase().includes(term) ||
-      bien.ubicacion.toLowerCase().includes(term)
-    );
+    // Aplicar filtro seleccionado
+    if (this.selectedFilter !== 'Mostrar Todos') {
+      if (this.selectedFilter === 'Aulas / Laboratorios') {
+        filtered = filtered.filter(item => item.tipo === 'Aula');
+      } else if (this.selectedFilter === 'Docentes') {
+        filtered = filtered.filter(item => item.tipo === 'Docente');
+      } else if (this.selectedFilter === 'Bienes (Activos)') {
+        filtered = filtered.filter(item => item.tipo === 'Bienes');
+      } else {
+        filtered = filtered.filter(item => item.estado === this.selectedFilter);
+      }
+    }
+
+    this.filteredItems = filtered;
+  }
+
+  selectFilter(filter: string): void {
+    this.selectedFilter = filter;
+    this.showFilterDropdown = false;
+    this.applyFilters();
+  }
+
+  toggleFilterDropdown(): void {
+    this.showFilterDropdown = !this.showFilterDropdown;
   }
 
   openAddModal(): void {
-    this.nuevoBien = {
-      codigoInventario: '',
+    this.nuevoItem = {
+      codigo: '',
       nombre: '',
-      modelo: '',
-      estado: 'Operativo',
-      fechaAdquisicion: '',
-      ubicacion: 'Aula 101'
+      tipo: 'Bienes',
+      ubicacion: '',
+      estado: ''
     };
     this.showAddModal = true;
   }
@@ -80,23 +137,23 @@ export class InventarioComponent implements OnInit {
     this.showAddModal = false;
   }
 
-  saveBien(): void {
-    if (this.nuevoBien.codigoInventario && this.nuevoBien.nombre && 
-        this.nuevoBien.modelo && this.nuevoBien.fechaAdquisicion) {
-      this.bienes.push({...this.nuevoBien});
-      this.filteredBienes = [...this.bienes];
+  saveItem(): void {
+    if (this.nuevoItem.codigo && this.nuevoItem.nombre && 
+        this.nuevoItem.ubicacion && this.nuevoItem.estado) {
+      this.items.push({...this.nuevoItem});
+      this.applyFilters();
       this.closeAddModal();
     }
   }
 
-  viewDetails(bien: Bien): void {
-    this.selectedBien = bien;
+  viewDetails(item: Item): void {
+    this.selectedItem = item;
     this.showDetailModal = true;
   }
 
   closeDetailModal(): void {
     this.showDetailModal = false;
-    this.selectedBien = null;
+    this.selectedItem = null;
   }
 }
 

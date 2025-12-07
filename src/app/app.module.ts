@@ -7,7 +7,10 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { InventarioComponent } from './components/inventario/inventario.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { AsignacionAulaComponent } from './components/asignacion-aula/asignacion-aula.component';
 import { routes } from './app.routes';
 
 @NgModule({
@@ -15,7 +18,10 @@ import { routes } from './app.routes';
     AppComponent,
     LoginComponent,
     InventarioComponent,
-    SidebarComponent
+    UsuariosComponent,
+    ReportesComponent,
+    SidebarComponent,
+    AsignacionAulaComponent
   ],
   imports: [
     BrowserModule,
@@ -28,4 +34,5 @@ import { routes } from './app.routes';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
 

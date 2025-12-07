@@ -1,0 +1,126 @@
+<div class="reportes-container">
+  <app-sidebar></app-sidebar>
+  
+  <div class="main-content">
+    <div class="header">
+      <h1 class="welcome">¡Bienvenido/a, <span class="user-name">{{ currentUser }}</span>!</h1>
+    </div>
+
+    <div class="content-area">
+      <div class="filter-buttons">
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'TODOS'"
+          (click)="selectFilter('TODOS')">
+          TODOS
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'EN REPARACION'"
+          (click)="selectFilter('EN REPARACION')">
+          EN REPARACION
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'PENDIENTE'"
+          (click)="selectFilter('PENDIENTE')">
+          PENDIENTE
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'RESUELTOS'"
+          (click)="selectFilter('RESUELTOS')">
+          RESUELTOS
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table class="reportes-table">
+          <thead>
+            <tr>
+              <th>ESTADO</th>
+              <th>ELEMENTO AFECTADO</th>
+              <th>TIPO DE INCIDENCIA</th>
+              <th>REPORTADO POR</th>
+              <th>FECHA/HORA</th>
+              <th>DETALLE DEL PROBLEMA</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reporte of filteredReportes">
+              <td>
+                <div class="status-cell">
+                  <span class="status-dot" 
+                        [class.reparacion]="reporte.estado === 'En Reparación'"
+                        [class.pendiente]="reporte.estado === 'Pendiente'"
+                        [class.resuelto]="reporte.estado === 'Resuelto'">
+                  </span>
+                  <span class="status-text">{{ reporte.estado }}</span>
+                </div>
+              </td>
+              <td>{{ reporte.elementoAfectado }}</td>
+              <td>{{ reporte.tipoIncidencia }}</td>
+              <td>{{ reporte.reportadoPor }}</td>
+              <td>{{ reporte.fechaHora }}</td>
+              <td>{{ reporte.detalleProblema }}</td>
+              <td>
+                <button class="view-link" (click)="viewDetails(reporte)">Ver</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalles de Incidencia -->
+<div class="modal-overlay" *ngIf="showDetailModal" (click)="closeDetailModal()">
+  <div class="modal-content detail-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeDetailModal()">×</button>
+    <h2 class="modal-title">Detalles de Incidencia #1</h2>
+    
+    <div class="detail-content" *ngIf="selectedReporte">
+      <div class="detail-row">
+        <span class="detail-label">Estado:</span>
+        <span class="status-badge-modal" 
+              [class.reparacion]="selectedReporte.estado === 'En Reparación'"
+              [class.pendiente]="selectedReporte.estado === 'Pendiente'"
+              [class.resuelto]="selectedReporte.estado === 'Resuelto'">
+          {{ selectedReporte.estado }}
+        </span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Elemento Afectado:</span>
+        <span class="detail-value">{{ selectedReporte.elementoAfectado }}</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Tipo:</span>
+        <span class="detail-value">{{ selectedReporte.tipoIncidencia }}</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Reportado Por:</span>
+        <span class="detail-value">{{ selectedReporte.reportadoPor }}</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Fecha/Hora:</span>
+        <span class="detail-value">{{ selectedReporte.fechaHora }}</span>
+      </div>
+      
+      <div class="detail-row full-width">
+        <span class="detail-label">Detalle Completo:</span>
+        <p class="detail-text">{{ selectedReporte.detalleProblema }}</p>
+      </div>
+    </div>
+    
+    <div class="modal-actions">
+      <button type="button" class="btn-close-modal" (click)="closeDetailModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+

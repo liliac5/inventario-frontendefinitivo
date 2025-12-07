@@ -9,43 +9,85 @@
     <div class="content-area">
       <h2 class="page-title">INVENTARIO</h2>
 
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="card-number">{{ totalAulas }}</div>
+          <div class="card-label">TOTAL AULAS/LABORATORIOS</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-number">{{ totalDocentes }}</div>
+          <div class="card-label">TOTAL DOCENTES REGISTRADOS</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-number">{{ totalBienes }}</div>
+          <div class="card-label">TOTAL BIENES (ACTIVOSFIJOS)</div>
+        </div>
+      </div>
+
       <div class="actions-bar">
         <div class="search-wrapper">
-          <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            <path d="M13 13 L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
           <input 
             type="text" 
             class="search-input" 
-            placeholder="Buscar..."
+            placeholder="BUSCAR POR NOMBRE, CODIGO O DESCRIPCION..."
             [(ngModel)]="searchTerm"
             (input)="onSearch()">
         </div>
         <button class="add-button" (click)="openAddModal()">
-          AGREGAR
+          Añadir nuevo elemento
         </button>
+        <div class="filter-dropdown-wrapper" (click)="$event.stopPropagation()">
+          <button class="show-all-button" (click)="toggleFilterDropdown()" type="button">
+            {{ selectedFilter }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="filter-dropdown" *ngIf="showFilterDropdown">
+            <button 
+              *ngFor="let option of filterOptions" 
+              class="filter-option"
+              type="button"
+              [class.active]="selectedFilter === option"
+              (click)="selectFilter(option)">
+              {{ option }}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="table-container">
         <table class="inventario-table">
           <thead>
             <tr>
-              <th>CODIGO DE INVENTARIO</th>
-              <th>MODELO</th>
-              <th>FECHA DE ADQUISICION</th>
-              <th>UBICACION</th>
+              <th>CÓDIGO/ID</th>
+              <th>NOMBRE/DESCRIPCIÓN</th>
+              <th>TIPO</th>
+              <th>UBICACIÓN / ÁREA</th>
+              <th>ESTADO</th>
               <th>ACCIONES</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let bien of filteredBienes">
-              <td>{{ bien.codigoInventario }}</td>
-              <td>{{ bien.modelo }}</td>
-              <td>{{ bien.fechaAdquisicion }}</td>
-              <td>{{ bien.ubicacion }}</td>
+            <tr *ngFor="let item of filteredItems">
+              <td>{{ item.codigo }}</td>
+              <td>{{ item.nombre }}</td>
+              <td>{{ item.tipo }}</td>
+              <td>{{ item.ubicacion }}</td>
               <td>
-                <button class="action-btn view-btn" (click)="viewDetails(bien)" title="Ver detalles">
+                <span class="status-badge" [class.operativo]="item.estado === 'Operativo'" 
+                      [class.mantenimiento]="item.estado === 'Mantenimiento'"
+                      [class.disponible]="item.estado === 'Disponible'"
+                      [class.asignado]="item.estado === 'Asignado'"
+                      [class.titular]="item.estado === 'Titular'"
+                      [class.asociado]="item.estado === 'Asociado'"
+                      [class.contratado]="item.estado === 'Contratado'">
+                  {{ item.estado }}
+                </span>
+              </td>
+              <td>
+                <button class="action-btn view-btn" (click)="viewDetails(item)" title="Ver detalles">
                   <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
                     <path d="M10 4 C6 4 3 6 1 10 C3 14 6 16 10 16 C14 16 17 14 19 10 C17 6 14 4 10 4 Z" 
                           stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -71,46 +113,42 @@
 <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closeAddModal()">×</button>
-    <h2 class="modal-title">Agregar Nuevo Bien</h2>
+    <h2 class="modal-title">Registro de Nuevo Activo/Persona/Espacio</h2>
     
-    <form class="modal-form" (ngSubmit)="saveBien()">
-      <div class="form-row">
-        <div class="form-col">
-          <div class="form-field">
-            <label>Código de Inventario *</label>
-            <input type="text" [(ngModel)]="nuevoBien.codigoInventario" name="codigoInventario" required>
-          </div>
-          <div class="form-field">
-            <label>Nombre del Bien *</label>
-            <input type="text" [(ngModel)]="nuevoBien.nombre" name="nombre" required>
-          </div>
-          <div class="form-field">
-            <label>Estado *</label>
-            <select [(ngModel)]="nuevoBien.estado" name="estado" required>
-              <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>Fecha de Adquisición *</label>
-            <input type="date" [(ngModel)]="nuevoBien.fechaAdquisicion" name="fechaAdquisicion" required>
-          </div>
+    <form class="modal-form" (ngSubmit)="saveItem()">
+      <div class="form-fields">
+        <div class="form-field">
+          <label>Código/ID (Ej: INV-001, D050, A-102) *</label>
+          <input type="text" [(ngModel)]="nuevoItem.codigo" name="codigo" placeholder="Ej: INV-001, D050, A-102" required>
         </div>
-        <div class="form-col">
-          <div class="form-field">
-            <label>Modelo *</label>
-            <input type="text" [(ngModel)]="nuevoBien.modelo" name="modelo" required>
-          </div>
-          <div class="form-field">
-            <label>Ubicación *</label>
-            <select [(ngModel)]="nuevoBien.ubicacion" name="ubicacion" required>
-              <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion">{{ ubicacion }}</option>
-            </select>
-          </div>
+        
+        <div class="form-field">
+          <label>Tipo de Elemento *</label>
+          <select [(ngModel)]="nuevoItem.tipo" name="tipo" required>
+            <option value="Bienes">Bienes (Activos)</option>
+            <option value="Aula">Aulas / Laboratorios</option>
+            <option value="Docente">Docentes</option>
+          </select>
+        </div>
+        
+        <div class="form-field">
+          <label>Ubicación / Área *</label>
+          <input type="text" [(ngModel)]="nuevoItem.ubicacion" name="ubicacion" required>
+        </div>
+        
+        <div class="form-field">
+          <label>Nombre / Descripción Corta *</label>
+          <input type="text" [(ngModel)]="nuevoItem.nombre" name="nombre" required>
+        </div>
+        
+        <div class="form-field">
+          <label>Estado Actual *</label>
+          <input type="text" [(ngModel)]="nuevoItem.estado" name="estado" placeholder="Ej: Operativo, Asignado, Mantenimiento, Titular, etc." required>
         </div>
       </div>
       
       <div class="modal-actions">
-        <button type="submit" class="btn-save">Guardar</button>
+        <button type="submit" class="btn-save">Guardar Elemento al Inventario</button>
         <button type="button" class="btn-cancel" (click)="closeAddModal()">Cancelar</button>
       </div>
     </form>
@@ -121,32 +159,28 @@
 <div class="modal-overlay" *ngIf="showDetailModal" (click)="closeDetailModal()">
   <div class="modal-content detail-modal" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closeDetailModal()">×</button>
-    <h2 class="modal-title">Detalles del Bien</h2>
+    <h2 class="modal-title">Detalles del Elemento</h2>
     
-    <div class="detail-content" *ngIf="selectedBien">
+    <div class="detail-content" *ngIf="selectedItem">
       <div class="detail-item">
-        <span class="detail-label">Código de Inventario:</span>
-        <span class="detail-value">{{ selectedBien.codigoInventario }}</span>
+        <span class="detail-label">Código/ID:</span>
+        <span class="detail-value">{{ selectedItem.codigo }}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Nombre del Bien:</span>
-        <span class="detail-value">{{ selectedBien.nombre }}</span>
+        <span class="detail-label">Nombre/Descripción:</span>
+        <span class="detail-value">{{ selectedItem.nombre }}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Modelo:</span>
-        <span class="detail-value">{{ selectedBien.modelo }}</span>
+        <span class="detail-label">Tipo:</span>
+        <span class="detail-value">{{ selectedItem.tipo }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Ubicación / Área:</span>
+        <span class="detail-value">{{ selectedItem.ubicacion }}</span>
       </div>
       <div class="detail-item">
         <span class="detail-label">Estado:</span>
-        <span class="detail-value">{{ selectedBien.estado }}</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Fecha de Adquisición:</span>
-        <span class="detail-value">{{ selectedBien.fechaAdquisicion }}</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Ubicación:</span>
-        <span class="detail-value">{{ selectedBien.ubicacion }}</span>
+        <span class="detail-value">{{ selectedItem.estado }}</span>
       </div>
     </div>
     
@@ -155,4 +189,5 @@
     </div>
   </div>
 </div>
+
 

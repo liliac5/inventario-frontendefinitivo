@@ -4,17 +4,24 @@
       <img src="assets/logo_Yavirac.png" alt="Logo YAVIRAC" class="logo-image-sidebar">
     </div>
     <p class="slogan">Fortaleciendo Capacidades</p>
+    <div class="user-info">
+      <p class="user-name-sidebar">{{ currentUser }}</p>
+      <p class="user-role">{{ userRole }}</p>
+    </div>
   </div>
 
   <nav class="sidebar-nav">
-    <button class="nav-item" (click)="navigateTo('/usuarios')">
+    <button class="nav-item" [class.active]="isActive('/usuarios')" (click)="navigateTo('/usuarios')">
       Gestión de Usuarios
     </button>
-    <button class="nav-item active" (click)="navigateTo('/inventario')">
+    <button class="nav-item" [class.active]="isActive('/inventario')" (click)="navigateTo('/inventario')">
       Inventario
     </button>
-    <button class="nav-item">
-      <!-- Opción adicional -->
+    <button class="nav-item" [class.active]="isActive('/reportes')" (click)="navigateTo('/reportes')">
+      Reportes
+    </button>
+    <button class="nav-item" [class.active]="isActive('/asignacion-aula')" (click)="navigateTo('/asignacion-aula')">
+      Asignacion de aula
     </button>
     <button class="nav-item">
       <!-- Opción adicional -->
