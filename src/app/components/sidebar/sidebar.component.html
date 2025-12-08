@@ -20,15 +20,50 @@
     <button class="nav-item" [class.active]="isActive('/reportes')" (click)="navigateTo('/reportes')">
       Reportes
     </button>
-    <button class="nav-item" [class.active]="isActive('/asignacion-aula')" (click)="navigateTo('/asignacion-aula')">
-      Asignacion de aula
-    </button>
-    <button class="nav-item">
-      <!-- Opción adicional -->
-    </button>
-    <button class="nav-item">
-      <!-- Opción adicional -->
-    </button>
+        <button class="nav-item" [class.active]="isActive('/asignacion-aula')" (click)="navigateTo('/asignacion-aula')">
+          Asignacion de aula
+        </button>
+        <button class="nav-item" [class.active]="isActive('/solicitudes-cambio')" (click)="navigateTo('/solicitudes-cambio')">
+          Solicitudes de cambio
+        </button>
+        <button class="nav-item" [class.active]="isActive('/portal-docente')" (click)="navigateTo('/portal-docente')">
+          Portal Docente
+        </button>
+        <button class="nav-item" [class.active]="isActive('/mi-aula-asignada')" (click)="navigateTo('/mi-aula-asignada')">
+          Mi Aula Asignada
+        </button>
   </nav>
+
+  <div class="sidebar-footer">
+    <button class="btn-cerrar-sesion" (click)="cerrarSesion()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="logout-icon">
+        <path d="M13 3H4C3.45 3 3 3.45 3 4V16C3 16.55 3.45 17 4 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 7L17 10L14 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Cerrar Sesión
+    </button>
+  </div>
+</div>
+
+<!-- Modal de Confirmación Cerrar Sesión -->
+<div class="modal-overlay" *ngIf="showConfirmLogout" (click)="cancelarCerrarSesion()">
+  <div class="modal-content logout-modal" (click)="$event.stopPropagation()">
+    <div class="modal-icon-wrapper">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" class="logout-modal-icon">
+        <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="2" fill="none"/>
+        <path d="M24 14V24M24 24L30 18M24 24L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 3H4C3.45 3 3 3.45 3 4V16C3 16.55 3.45 17 4 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(8, 8)"/>
+        <path d="M17 10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(8, 8)"/>
+        <path d="M14 7L17 10L14 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(8, 8)"/>
+      </svg>
+    </div>
+    <h3 class="modal-title-logout">¿Está seguro de cerrar sesión?</h3>
+    <p class="modal-message-logout">Se cerrará su sesión actual y será redirigido a la página de inicio de sesión.</p>
+    <div class="modal-actions-logout">
+      <button class="btn-cancelar-logout" (click)="cancelarCerrarSesion()">Cancelar</button>
+      <button class="btn-confirmar-logout" (click)="confirmarCerrarSesion()">Cerrar Sesión</button>
+    </div>
+  </div>
 </div>
 

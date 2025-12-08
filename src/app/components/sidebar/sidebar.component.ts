@@ -12,6 +12,7 @@ export class SidebarComponent implements OnInit {
   currentUser = 'Ing Edison';
   userRole = 'Admin';
   currentRoute: string = '';
+  showConfirmLogout: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -30,6 +31,21 @@ export class SidebarComponent implements OnInit {
 
   isActive(route: string): boolean {
     return this.currentRoute === route || this.currentRoute.startsWith(route + '/');
+  }
+
+  cerrarSesion(): void {
+    this.showConfirmLogout = true;
+  }
+
+  confirmarCerrarSesion(): void {
+    // Aquí puedes agregar lógica adicional como limpiar tokens, datos de usuario, etc.
+    // Por ahora, simplemente redirigimos al login
+    this.showConfirmLogout = false;
+    this.router.navigate(['/login']);
+  }
+
+  cancelarCerrarSesion(): void {
+    this.showConfirmLogout = false;
   }
 }
 

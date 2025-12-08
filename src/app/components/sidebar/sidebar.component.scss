@@ -154,3 +154,192 @@
   transform: translateY(-1px);
 }
 
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-cerrar-sesion {
+  width: 100%;
+  background: rgba(244, 67, 54, 0.2);
+  border: 2px solid rgba(244, 67, 54, 0.4);
+  border-radius: 14px;
+  padding: 16px 22px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cerrar-sesion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.3) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-cerrar-sesion:hover {
+  background: rgba(244, 67, 54, 0.35);
+  border-color: rgba(244, 67, 54, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(244, 67, 54, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-cerrar-sesion:hover::before {
+  opacity: 1;
+}
+
+.btn-cerrar-sesion:active {
+  transform: translateY(0);
+}
+
+.logout-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+// Modal de Confirmación Cerrar Sesión
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.logout-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logout-modal-icon {
+  color: #f44336;
+  width: 64px;
+  height: 64px;
+}
+
+.modal-title-logout {
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.modal-message-logout {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+.modal-actions-logout {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-cancelar-logout {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.btn-cancelar-logout:hover {
+  background: #d0d0d0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-confirmar-logout {
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.btn-confirmar-logout:hover {
+  background: #da190b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+@media (max-width: 768px) {
+  .logout-modal {
+    padding: 30px 20px;
+    max-width: 90%;
+  }
+
+  .modal-actions-logout {
+    flex-direction: column;
+  }
+
+  .btn-cancelar-logout,
+  .btn-confirmar-logout {
+    width: 100%;
+  }
+}
+

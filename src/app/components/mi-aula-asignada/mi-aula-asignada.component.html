@@ -1,0 +1,96 @@
+<div class="aula-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 class="welcome">¡Bienvenido/a, <span class="user-name">{{ currentUser }}</span>!</h1>
+    </div>
+
+    <div class="content-area">
+      <h2 class="page-title">Información Detallada del Aula Asignada</h2>
+
+      <div class="aula-designada-box">
+        <span class="aula-label">Aula Designada:</span>
+        <span class="aula-value">{{ aulaAsignada }}</span>
+      </div>
+
+      <p class="intro-text">
+        Esta es la información de su aula asignada para el semestre actual. Utilice estos datos para planificar sus actividades y reportar incidentes con precisión.
+      </p>
+
+      <div class="info-sections">
+        <!-- Sección Mobiliario y Capacidad -->
+        <div class="info-section">
+          <h3 class="section-header">Mobiliario y Capacidad</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Capacidad Máxima:</span>
+              <span class="info-value">40 Pupitres</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Tipo de Mobiliario:</span>
+              <span class="info-value">Sillas individuales con paleta</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Escritorio del Docente:</span>
+              <span class="info-value">Mesa grande con cerradura</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Pizarrón:</span>
+              <span class="info-value">Pizarra Acrílica (3m x 1.2m)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Equipamiento Tecnológico -->
+        <div class="info-section">
+          <h3 class="section-header">Equipamiento Tecnológico</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Proyector Instalado:</span>
+              <span class="info-value">Si (HDMI, VGA)</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Conexión a Internet (WiFi):</span>
+              <span class="info-value">Red 'Campus-Secure'</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Sistema de Audio:</span>
+              <span class="info-value">Parlantes de techo</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Computador de Cátedra:</span>
+              <span class="info-value">Disponible (Windows 11)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Servicios e Infraestructura -->
+        <div class="info-section">
+          <h3 class="section-header">Servicios e Infraestructura</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Aire Acondicionado:</span>
+              <span class="info-value">Funcional</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Iluminación:</span>
+              <span class="info-value">Lámparas LED (Buen estado)</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Ventanas:</span>
+              <span class="info-value">Con cortinas Blackout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-button-container">
+        <button class="btn-formulario" (click)="irAlFormulario()">
+          Ir al Formulario de Solicitudes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

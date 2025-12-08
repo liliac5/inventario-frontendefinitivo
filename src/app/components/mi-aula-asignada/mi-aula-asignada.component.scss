@@ -1,0 +1,220 @@
+.aula-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #0d47a1;
+}
+
+.header {
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+  padding: 35px 50px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.welcome {
+  color: white;
+  font-size: 26px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.user-name {
+  color: #ffb74d;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.content-area {
+  flex: 1;
+  padding: 50px;
+  background: linear-gradient(180deg, #0d47a1 0%, #1565c0 100%);
+  position: relative;
+  overflow-y: auto;
+}
+
+.page-title {
+  color: white;
+  font-size: 36px;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 30px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.aula-designada-box {
+  background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
+  border-radius: 16px;
+  padding: 25px 40px;
+  margin: 0 auto 30px auto;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(255, 111, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.aula-label {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.aula-value {
+  color: white;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.intro-text {
+  color: white;
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 40px auto;
+  opacity: 0.95;
+  padding: 0 20px;
+}
+
+.info-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto 40px auto;
+}
+
+.info-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 35px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  color: #0d47a1;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 25px 0;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #0d47a1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #0d47a1;
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.info-label {
+  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.action-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-formulario {
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(13, 71, 161, 0.3);
+}
+
+.btn-formulario:hover {
+  background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(13, 71, 161, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-formulario:active {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 968px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-area {
+    padding: 30px 20px;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+
+  .aula-designada-box {
+    padding: 20px 30px;
+  }
+
+  .aula-value {
+    font-size: 28px;
+  }
+
+  .info-section {
+    padding: 20px;
+  }
+
+  .section-header {
+    font-size: 18px;
+  }
+}
+

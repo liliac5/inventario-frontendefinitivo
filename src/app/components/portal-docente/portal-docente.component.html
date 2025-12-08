@@ -1,0 +1,110 @@
+<div class="portal-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 class="welcome">¡Bienvenido/a, <span class="user-name">{{ currentUser }}</span>!</h1>
+    </div>
+
+    <div class="portal-content">
+    <div class="main-title-section">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" class="title-icon">
+        <path d="M14 2L16 10H24L18 14L20 22L14 18L8 22L10 14L4 10H12L14 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+        <rect x="6" y="6" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+      <h2 class="main-title">Solicitud de Mantenimiento y Cambio de Aulas</h2>
+    </div>
+
+    <div class="content-grid">
+      <!-- Sección Crear Nueva Solicitud -->
+      <div class="form-section">
+        <h3 class="section-title">Crear Nueva Solicitud</h3>
+        
+        <form (ngSubmit)="enviarSolicitud()">
+          <div class="form-group">
+            <label for="aula">Aula o Laboratorio Afectado</label>
+            <select 
+              id="aula"
+              name="aula"
+              [(ngModel)]="aulaSeleccionada"
+              class="form-select"
+              required>
+              <option *ngFor="let aula of aulas" [value]="aula">
+                {{ aula }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tipo">Tipo de Solicitud</label>
+            <select 
+              id="tipo"
+              name="tipo"
+              [(ngModel)]="tipoSolicitud"
+              class="form-select"
+              required>
+              <option *ngFor="let tipo of tiposSolicitud" [value]="tipo">
+                {{ tipo }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="detalle">Detalle del Problema / Requerimiento</label>
+            <textarea 
+              id="detalle"
+              name="detalle"
+              [(ngModel)]="detalleProblema"
+              class="form-textarea"
+              placeholder="Describa el problema o el cambio que necesita..."
+              rows="6"
+              required></textarea>
+          </div>
+
+          <button type="submit" class="btn-enviar">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="envelope-icon">
+              <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M2 6L10 11L18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Enviar Solicitud
+          </button>
+        </form>
+      </div>
+
+      <!-- Sección Historial -->
+      <div class="history-section">
+        <h3 class="section-title">Historial de Mis Solicitudes</h3>
+        
+        <div class="table-container">
+          <table class="solicitudes-table">
+            <thead>
+              <tr>
+                <th>AULA</th>
+                <th>TIPO</th>
+                <th>DETALLE</th>
+                <th>ESTADO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let solicitud of solicitudes">
+                <td class="aula-cell">{{ solicitud.aula }}</td>
+                <td class="tipo-cell">{{ solicitud.tipo }}</td>
+                <td class="detalle-cell">{{ solicitud.detalle }}</td>
+                <td>
+                  <span class="estado-badge"
+                        [class.pendiente]="solicitud.estado === 'Pendiente'"
+                        [class.aprobado]="solicitud.estado === 'Aprobado'"
+                        [class.rechazado]="solicitud.estado === 'Rechazado'">
+                    <span class="estado-dot"></span>
+                    {{ solicitud.estado }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -11,6 +11,9 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AsignacionAulaComponent } from './components/asignacion-aula/asignacion-aula.component';
+import { SolicitudesCambioComponent } from './components/solicitudes-cambio/solicitudes-cambio.component';
+import { PortalDocenteComponent } from './components/portal-docente/portal-docente.component';
+import { MiAulaAsignadaComponent } from './components/mi-aula-asignada/mi-aula-asignada.component';
 import { routes } from './app.routes';
 
 @NgModule({
@@ -21,7 +24,10 @@ import { routes } from './app.routes';
     UsuariosComponent,
     ReportesComponent,
     SidebarComponent,
-    AsignacionAulaComponent
+    AsignacionAulaComponent,
+    SolicitudesCambioComponent,
+    PortalDocenteComponent,
+    MiAulaAsignadaComponent
   ],
   imports: [
     BrowserModule,

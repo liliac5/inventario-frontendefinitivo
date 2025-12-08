@@ -1,0 +1,120 @@
+<div class="solicitudes-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 class="welcome">¡Bienvenido/a, <span class="user-name">{{ currentUser }}</span>!</h1>
+    </div>
+
+    <div class="content-area">
+      <h2 class="page-title">SOLICITUDES DE CAMBIO</h2>
+
+      <div class="table-container">
+        <table class="solicitudes-table">
+          <thead>
+            <tr>
+              <th>ID / ESTADO</th>
+              <th>DOCENTE / AULA</th>
+              <th>TIPO DE SOLICITUD</th>
+              <th>DESCRIPCIÓN</th>
+              <th>FECHA</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let solicitud of filteredSolicitudes">
+              <td>
+                <div class="id-estado-cell">
+                  <span class="solicitud-id">#{{ solicitud.id }}</span>
+                  <span class="estado-badge" 
+                        [class.pendiente]="solicitud.estado === 'Pendiente'"
+                        [class.aceptada]="solicitud.estado === 'Aceptada'"
+                        [class.rechazada]="solicitud.estado === 'Rechazada'">
+                    <span class="estado-dot"></span>
+                    {{ solicitud.estado }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="docente-aula-cell">
+                  <div class="docente">{{ solicitud.docente }}</div>
+                  <div class="aula">{{ solicitud.aula }}</div>
+                </div>
+              </td>
+              <td>{{ solicitud.tipo }}</td>
+              <td class="descripcion-cell">{{ solicitud.descripcion }}</td>
+              <td>{{ solicitud.fecha }}</td>
+              <td>
+                <div class="acciones-cell">
+                  <button class="btn-aceptar" (click)="aceptarDesdeTabla(solicitud)">Aceptar</button>
+                  <button class="btn-rechazar" (click)="rechazarDesdeTabla(solicitud)">Rechazar</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal-overlay" *ngIf="showConfirmModal" (click)="closeConfirmModal()">
+  <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+    <h3 class="confirm-title">Confirmación</h3>
+    <p class="confirm-message">{{ confirmMessage }}</p>
+    <div class="confirm-actions">
+      <button class="btn-cancelar" (click)="closeConfirmModal()">Cancelar</button>
+      <button class="btn-confirmar" (click)="confirmActionExecute()">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje de Éxito -->
+<div class="success-message" *ngIf="showSuccessToast">
+  <div class="success-content">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="success-icon">
+      <path d="M10 0C4.477 0 0 4.477 0 10C0 15.523 4.477 20 10 20C15.523 20 20 15.523 20 10C20 4.477 15.523 0 10 0ZM8 14L4 10L5.41 8.59L8 11.17L14.59 4.58L16 6L8 14Z" fill="currentColor"/>
+    </svg>
+    <span>{{ successMessage }}</span>
+    <button class="close-success" (click)="closeSuccessMessage()">×</button>
+  </div>
+</div>
+
+<!-- Modal Detalles de Solicitud -->
+<div class="modal-overlay" *ngIf="showDetailModal" (click)="closeDetailModal()">
+  <div class="modal-content detail-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeDetailModal()">×</button>
+    <h2 class="modal-title">Solicitud #{{ selectedSolicitud?.id }}</h2>
+    
+    <div class="detail-content" *ngIf="selectedSolicitud">
+      <div class="detail-row">
+        <span class="detail-label">Docente:</span>
+        <span class="detail-value">{{ selectedSolicitud.docente }}</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Aula:</span>
+        <span class="detail-value">{{ selectedSolicitud.aula }}</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Tipo:</span>
+        <span class="detail-value">{{ selectedSolicitud.tipo }}</span>
+      </div>
+      
+      <div class="detail-row full-width">
+        <span class="detail-label">Detalle de la Solicitud:</span>
+        <div class="detalle-text-area">
+          {{ selectedSolicitud.descripcion }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-actions">
+      <button type="button" class="btn-rechazar-modal" (click)="rechazarSolicitud(selectedSolicitud!)">Rechazar</button>
+      <button type="button" class="btn-aceptar-modal" (click)="aceptarSolicitud(selectedSolicitud!)">Aceptar y Aplicar</button>
+    </div>
+  </div>
+</div>
+
