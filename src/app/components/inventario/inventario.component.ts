@@ -4,6 +4,7 @@ import { BienesService } from '../../services/bienes.service';
 import { CategoriasService } from '../../services/categorias.service';
 import { AulasService } from '../../services/aulas.service';
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
@@ -95,10 +96,27 @@ usuarioAulaSeleccionada: string = '';
     private bienesService: BienesService,
     private categoriasService: CategoriasService,
       private aulasService: AulasService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    // Obtener usuario y establecer currentUser según el rol
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      const roleId = user.idRol;
+      if (roleId === 2) {
+        // Coordinador
+        this.currentUser = 'Coordinador';
+      } else if (roleId === 1) {
+        // Admin
+        this.currentUser = 'Administrador';
+      } else {
+        // Otros roles
+        this.currentUser = user.nombre || 'Usuario';
+      }
+    }
+    
     this.loadBienes();
     this.loadCategorias();
       this.loadAulas();
@@ -352,6 +370,13 @@ onAulaSeleccionada(idAula: number | null): void {
 
   const aula = this.aulasAsignadas.find(a => a.idAula === idAula);
   this.usuarioAulaSeleccionada = aula ? aula.nombreUsuario : '';
+  
+  // Auto-completar custodio si está vacío
+  if (this.showAddModal && !this.nuevoBien.custodio) {
+    this.nuevoBien.custodio = this.usuarioAulaSeleccionada;
+  } else if (this.showDetailModal && !this.selectedBien.custodio) {
+    this.selectedBien.custodio = this.usuarioAulaSeleccionada;
+  }
 }
 
 }

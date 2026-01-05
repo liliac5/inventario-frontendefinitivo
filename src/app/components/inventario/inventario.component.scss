@@ -509,7 +509,7 @@ body.sidebar-collapsed .content-area {
   background: rgba(13, 71, 161, 0.1);
   border: 2px solid rgba(13, 71, 161, 0.2);
   cursor: pointer;
-  padding: 10px 14px;
+  padding: 10px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -519,6 +519,18 @@ body.sidebar-collapsed .content-area {
   font-size: 16px;
   min-width: 40px;
   min-height: 40px;
+  
+  svg {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover svg {
+    transform: scale(1.1);
+  }
+  
+  &:active svg {
+    transform: scale(0.95);
+  }
 }
 
 .view-btn:hover {

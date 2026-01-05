@@ -17,6 +17,9 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Inicializar detección de sesión
+    // El SessionService se inicializa automáticamente al inyectarse
+
     // Escuchar cambios de navegación
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)

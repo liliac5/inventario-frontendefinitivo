@@ -204,4 +204,35 @@ denegarSolicitud(id: number) {
     );
   }
 
+  // Métodos para Reportes de Incidencias
+  getReportes(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/reportes`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getReportesByUsuario(idUsuario: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/reportes/usuario/${idUsuario}`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  createReporte(reporte: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}/reportes`,
+      reporte,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  updateReporte(id: number, reporte: any): Observable<any> {
+    return this.http.put<any>(
+      `${this.baseUrl}/reportes/${id}`,
+      reporte,
+      { headers: this.getHeaders() }
+    );
+  }
+
 }

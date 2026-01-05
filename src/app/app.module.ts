@@ -14,6 +14,8 @@ import { AsignacionAulaComponent } from './components/asignacion-aula/asignacion
 import { SolicitudesCambioComponent } from './components/solicitudes-cambio/solicitudes-cambio.component';
 import { PortalDocenteComponent } from './components/portal-docente/portal-docente.component';
 import { MiAulaAsignadaComponent } from './components/mi-aula-asignada/mi-aula-asignada.component';
+import { ReportesDocenteComponent } from './components/reportes-docente/reportes-docente.component';
+import { SessionTimerComponent } from './components/session-timer/session-timer.component';
 import { routes } from './app.routes';
 import { InventarioComponent } from './components/inventario/inventario.component';
 
@@ -28,6 +30,8 @@ import { InventarioComponent } from './components/inventario/inventario.componen
     SolicitudesCambioComponent,
     PortalDocenteComponent,
     MiAulaAsignadaComponent,
+    ReportesDocenteComponent,
+    SessionTimerComponent,
     InventarioComponent
   ],
   imports: [

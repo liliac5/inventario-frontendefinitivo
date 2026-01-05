@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
 
 interface MenuItem {
   route: string;
@@ -25,13 +26,15 @@ export class SidebarComponent implements OnInit {
   menuItems: MenuItem[] = [
     // Menú para Admin
     { route: '/usuarios', label: 'Gestión de Usuarios', roles: [1] },
+    // Menú para Admin y Coordinador
     { route: '/inventario', label: 'Inventario', roles: [1, 2] },
     { route: '/asignacion-aula', label: 'Asignación de Aula', roles: [1, 2] },
     { route: '/solicitudes-cambio', label: 'Solicitudes de Cambio', roles: [1, 2] },
-    { route: '/reportes', label: 'Reportes', roles: [1] },
+    { route: '/reportes', label: 'Reportes', roles: [1, 2] },
     // Menú para Docente
     { route: '/portal-docente', label: 'Portal Docente', roles: [3] },
-    { route: '/mi-aula-asignada', label: 'Mi Aula Asignada', roles: [3] }
+    { route: '/mi-aula-asignada', label: 'Mi Aula Asignada', roles: [3] },
+    { route: '/reportes-docente', label: 'Reportes', roles: [3] }
   ];
 
   constructor(
@@ -73,12 +76,46 @@ export class SidebarComponent implements OnInit {
   }
 
   cerrarSesion(): void {
-    this.showConfirmLogout = true;
+    // Mostrar confirmación con SweetAlert2
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: '¿Está seguro de que desea cerrar su sesión?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#ff6f00',
+      cancelButtonColor: '#666',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        popup: 'swal-logout-popup',
+        confirmButton: 'swal-logout-confirm',
+        cancelButton: 'swal-logout-cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Mostrar mensaje de cierre exitoso
+        Swal.fire({
+          title: 'Cerrando sesión...',
+          text: 'Su sesión se está cerrando',
+          icon: 'info',
+          timer: 1500,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          customClass: {
+            popup: 'swal-logout-popup'
+          }
+        }).then(() => {
+          this.authService.logout();
+        });
+      }
+    });
   }
 
   confirmarCerrarSesion(): void {
-    this.showConfirmLogout = false;
-    this.authService.logout();
+    // Este método se mantiene por compatibilidad con el modal HTML existente
+    // pero ahora usamos directamente cerrarSesion() con SweetAlert2
+    this.cerrarSesion();
   }
 
   cancelarCerrarSesion(): void {

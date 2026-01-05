@@ -47,7 +47,17 @@ tipoAlerta: 'error' | 'success' = 'error';
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     if (user) {
-      this.currentUser = user.nombre || 'Administrador';
+      const roleId = user.idRol;
+      if (roleId === 2) {
+        // Coordinador
+        this.currentUser = 'Coordinador';
+      } else if (roleId === 1) {
+        // Admin
+        this.currentUser = 'Administrador';
+      } else {
+        // Otros roles
+        this.currentUser = user.nombre || 'Usuario';
+      }
     } else {
       this.currentUser = 'Administrador';
     }

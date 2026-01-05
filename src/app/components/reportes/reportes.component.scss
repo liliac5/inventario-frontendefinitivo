@@ -186,6 +186,14 @@ body.sidebar-collapsed .content-area {
   z-index: 1;
 }
 
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 16px;
+  font-weight: 500;
+}
+
 .reportes-table {
   width: 100%;
   border-collapse: separate;
@@ -494,11 +502,48 @@ body.sidebar-collapsed .content-area {
   color: #2e7d32;
 }
 
+.estado-select {
+  padding: 8px 16px;
+  border: 2px solid #e8eaf6;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a237e;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.estado-select:focus {
+  outline: none;
+  border-color: #0d47a1;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+}
+
 .modal-actions {
   display: flex;
   gap: 15px;
   justify-content: flex-end;
   margin-top: 30px;
+}
+
+.btn-save-estado {
+  background: #0d47a1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-save-estado:hover {
+  background: #1565c0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
 }
 
 .btn-close-modal {

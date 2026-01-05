@@ -29,6 +29,22 @@ export class SolicitudesCambioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Obtener usuario y establecer currentUser según el rol
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      const roleId = user.idRol;
+      if (roleId === 2) {
+        // Coordinador
+        this.currentUser = 'Coordinador';
+      } else if (roleId === 1) {
+        // Admin
+        this.currentUser = 'Administrador';
+      } else {
+        // Otros roles
+        this.currentUser = user.nombre || 'Usuario';
+      }
+    }
+    
     this.loadSolicitudes();
   }
 
