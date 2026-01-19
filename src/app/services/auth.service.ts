@@ -5,7 +5,6 @@ import { ApiService } from './api.service';
 import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import Swal from 'sweetalert2';
-import { SessionTimerService } from './session-timer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +39,7 @@ export class AuthService {
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private ngZone: NgZone,
-    private sessionTimerService: SessionTimerService
+    private ngZone: NgZone
   ) {
     // Escuchar mensajes de cierre de sesión de otras ventanas
     this.initLogoutListener();
@@ -120,9 +118,6 @@ export class AuthService {
       localStorage.setItem('currentUser', JSON.stringify(usuario));
       localStorage.setItem('token', tokenResponse);
 
-      // Iniciar timer de sesión
-      this.sessionTimerService.startSession();
-
       // NO hacemos redirect aquí, lo maneja el componente
       return usuario;
     })
@@ -173,9 +168,6 @@ private mapRolToId(rol: string | number): number {
     this.currentUser = null;
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
-    
-    // Detener timer de sesión
-    this.sessionTimerService.stopTimer();
     
     // Si debe hacer broadcast y no lo hemos hecho ya
     if (broadcast) {

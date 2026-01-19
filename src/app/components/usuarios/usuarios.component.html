@@ -192,8 +192,9 @@
           <label>Fecha de Registro</label>
           <input type="date"
                  name="fechaRegistro"
-                 [(ngModel)]="nuevoUsuario.fechaRegistro"
-                 [max]="today">
+                 [value]="today"
+                 readonly
+                 disabled>
         </div>
 
       </div>

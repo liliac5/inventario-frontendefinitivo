@@ -113,29 +113,22 @@ mostrarMensaje(titulo: string, mensaje: string, tipo: 'error' | 'success') {
 
 registrarAsignacion(): void {
 
-  if (!this.nuevoUsuarioId || !this.nuevaAulaId || !this.nuevaFecha) {
+  if (!this.nuevoUsuarioId || !this.nuevaAulaId) {
     Swal.fire(
       'Campos incompletos',
-      'Debe seleccionar un usuario, un aula y una fecha.',
+      'Debe seleccionar un usuario y un aula.',
       'warning'
     );
     return;
   }
 
-if (this.nuevaFecha !== this.fechaHoy) {
-  Swal.fire(
-    'Fecha inválida',
-    'Solo se permite la fecha del día de hoy.',
-    'error'
-  );
-  return;
-}
-
+  // Siempre usar la fecha actual, ignorando cualquier valor del campo
+  const fechaActual = this.fechaHoy;
 
   const body = {
     idUsuario: this.nuevoUsuarioId,
     idAula: this.nuevaAulaId,
-    fechaSolicitud: this.nuevaFecha
+    fechaSolicitud: fechaActual
   };
 
   this.apiService.createAsignacion(body).subscribe({
@@ -251,13 +244,8 @@ openEditModal(asignacion: Asignacion): void {
 
   this.editUsuarioId = asignacion.usuario.idUsuario;
   this.editAulaId = asignacion.aula.idAula;
-  if (asignacion.fechaSolicitud) {
-    this.editFecha = asignacion.fechaSolicitud
-      .toString()
-      .substring(0, 10);
-  } else {
-    this.editFecha = '';
-  }
+  // Siempre usar la fecha actual
+  this.editFecha = this.fechaHoy;
   this.showEditModal = true;
 }
 

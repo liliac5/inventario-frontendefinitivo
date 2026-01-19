@@ -16,7 +16,7 @@ export class UsuariosComponent implements OnInit {
   searchTerm = '';
   showAddModal = false;
   showEditModal = false;
-  today = new Date().toISOString().split('T')[0];
+  today: string = '';
 
 
   usuarios: Usuario[] = [];
@@ -27,7 +27,7 @@ export class UsuariosComponent implements OnInit {
     nombre: '',
     email: '',
     estado: true,
-    fechaRegistro: new Date().toISOString(),
+    fechaRegistro: '',
     idRol: 0
   };
 
@@ -42,6 +42,13 @@ export class UsuariosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Calcular fecha actual en zona horaria local (no UTC)
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = String(hoy.getMonth() + 1).padStart(2, '0');
+    const day = String(hoy.getDate()).padStart(2, '0');
+    this.today = `${year}-${month}-${day}`;
+    
     this.loadRoles();
     this.loadUsuarios();
   }
@@ -128,13 +135,20 @@ saveUsuario(): void {
     return;
   }
 
+  // Siempre usar la fecha actual en zona horaria local (no UTC)
+  const hoy = new Date();
+  const year = hoy.getFullYear();
+  const month = String(hoy.getMonth() + 1).padStart(2, '0');
+  const day = String(hoy.getDate()).padStart(2, '0');
+  const fechaActual = `${year}-${month}-${day}`;
+
   const usuario: Usuario = {
     idUsuario: 0,
     nombre: this.nuevoUsuario.nombre,
     email: this.nuevoUsuario.email,
     contraseña: this.passwordTemp,
     estado: this.nuevoUsuario.estado ?? true,
-    fechaRegistro: this.nuevoUsuario.fechaRegistro!,
+    fechaRegistro: fechaActual,
     idRol: this.nuevoUsuario.idRol!
   };
 
@@ -332,11 +346,19 @@ openAddModal(): void {
   this.isEditMode = false;
   this.usuarioEditId = null;
 
+  // Asegurar que la fecha actual esté actualizada
+  const hoy = new Date();
+  const year = hoy.getFullYear();
+  const month = String(hoy.getMonth() + 1).padStart(2, '0');
+  const day = String(hoy.getDate()).padStart(2, '0');
+  const fechaActual = `${year}-${month}-${day}`;
+  this.today = fechaActual;
+
   this.nuevoUsuario = {
     nombre: '',
     email: '',
     estado: true,
-    fechaRegistro: new Date().toISOString(),
+    fechaRegistro: fechaActual,
     idRol: this.roles.length ? this.roles[0].idRol : 0
   };
 
