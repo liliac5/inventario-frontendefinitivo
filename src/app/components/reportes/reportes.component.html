@@ -7,35 +7,46 @@
     </div>
 
     <div class="content-area">
-      <div class="filter-buttons">
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter === 'TODOS'"
-          (click)="selectFilter('TODOS')">
-          TODOS
-        </button>
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter === 'EN REPARACION'"
-          (click)="selectFilter('EN REPARACION')">
-          EN REPARACION
-        </button>
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter === 'PENDIENTE'"
-          (click)="selectFilter('PENDIENTE')">
-          PENDIENTE
-        </button>
-        <button 
-          class="filter-btn" 
-          [class.active]="selectedFilter === 'RESUELTOS'"
-          (click)="selectFilter('RESUELTOS')">
-          RESUELTOS
-        </button>
-      </div>
+      <h2 class="page-title">REPORTES</h2>
 
-      <div class="table-container">
-        <table class="reportes-table">
+      <div class="content-card">
+        <div class="content-card-header">
+          <div>
+            <h3 class="card-title">Reportes de incidencias</h3>
+            <p class="card-subtitle">Filtra y gestiona los reportes registrados.</p>
+          </div>
+          <span class="card-count">{{ filteredReportes.length }} reportes</span>
+        </div>
+
+        <div class="filter-buttons">
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter === 'TODOS'"
+            (click)="selectFilter('TODOS')">
+            TODOS
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter === 'EN REPARACION'"
+            (click)="selectFilter('EN REPARACION')">
+            EN REPARACION
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter === 'PENDIENTE'"
+            (click)="selectFilter('PENDIENTE')">
+            PENDIENTE
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="selectedFilter === 'RESUELTOS'"
+            (click)="selectFilter('RESUELTOS')">
+            RESUELTOS
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="reportes-table">
           <thead>
             <tr>
               <th>ESTADO</th>
@@ -72,7 +83,8 @@
               <td colspan="7" class="no-data">No hay reportes registrados</td>
             </tr>
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   </div>

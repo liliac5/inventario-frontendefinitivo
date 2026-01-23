@@ -25,6 +25,8 @@ export class UsuariosComponent implements OnInit {
 
   nuevoUsuario: Partial<Usuario> = {
     nombre: '',
+    nombres_completos: '',
+    cedula: '',
     email: '',
     estado: true,
     fechaRegistro: '',
@@ -32,9 +34,14 @@ export class UsuariosComponent implements OnInit {
   };
 
   passwordTemp = '';
+  editPasswordTemp = '';
   showPassword = false;
   isEditMode: boolean = false;
   usuarioEditId: number | null = null;
+  isCedulaLoading = false;
+  cedulaError = '';
+  usuarioYaCreado = false;
+  private cedulaLookupTimeout: number | null = null;
 
   constructor(
     private apiService: ApiService,
@@ -67,19 +74,28 @@ export class UsuariosComponent implements OnInit {
 
   loadUsuarios(): void {
     this.apiService.getUsuarios().subscribe({
-      next: usuarios => {
+      next: (usuariosResponse: any) => {
+        const usuarios: Usuario[] = Array.isArray(usuariosResponse)
+          ? usuariosResponse
+          : usuariosResponse?.data || usuariosResponse?.content || usuariosResponse?.usuarios || [];
+
         console.log('Usuarios recibidos del backend:', usuarios);
         // Log detallado de cada usuario
         usuarios.forEach((usuario, index) => {
           console.log(`Usuario ${index + 1}:`, {
             nombre: usuario.nombre,
+            nombres_completos: usuario.nombres_completos,
+            cedula: usuario.cedula,
             idRol: usuario.idRol,
             rol: usuario.rol,
             rolNombre: usuario.rol?.nombre
           });
         });
-        this.usuarios = usuarios;
-        this.filteredUsuarios = [...usuarios];
+        const usuariosConRol = usuarios.filter(usuario =>
+          this.hasAssignedRole(usuario) || this.isCurrentUser(usuario)
+        );
+        this.usuarios = usuariosConRol;
+        this.filteredUsuarios = [...usuariosConRol];
         // Verificar que los roles estén cargados
         console.log('Roles disponibles:', this.roles);
       },
@@ -96,9 +112,9 @@ export class UsuariosComponent implements OnInit {
     }
 
     this.filteredUsuarios = this.usuarios.filter(u =>
-      u.nombre.toLowerCase().includes(term) ||
-      u.email.toLowerCase().includes(term) ||
-      this.getRolNombre(u.idRol).toLowerCase().includes(term)
+      this.getNombreCompleto(u).toLowerCase().includes(term) ||
+      this.getCedula(u).toLowerCase().includes(term) ||
+      this.getRolNombre(u.idRol, u).toLowerCase().includes(term)
     );
   }
 
@@ -107,25 +123,227 @@ export class UsuariosComponent implements OnInit {
 
   this.nuevoUsuario = {
     nombre: usuario.nombre,
+    nombres_completos: usuario.nombres_completos || usuario.nombreCompleto || usuario.nombre || '',
+    cedula: usuario.cedula || (usuario as any).cedulaUsuario || (usuario as any).numeroCedula || '',
     email: usuario.email,
     estado: usuario.estado,
     idRol: usuario.idRol
   };
 
   this.showEditModal = true;
+  this.editPasswordTemp = '';
 }
 
 closeEditModal(): void {
   this.showEditModal = false;
   this.usuarioEditId = null;
+  this.editPasswordTemp = '';
 }
 
   closeAddModal(): void {
     this.showAddModal = false;
   }
 
+  onCedulaInput(): void {
+    const cedula = (this.nuevoUsuario.cedula || '').toString().trim();
+    this.cedulaError = '';
+    this.nuevoUsuario.nombre = '';
+    this.nuevoUsuario.nombres_completos = '';
+    this.usuarioYaCreado = false;
+
+    if (this.cedulaLookupTimeout) {
+      window.clearTimeout(this.cedulaLookupTimeout);
+    }
+
+    if (!cedula) {
+      return;
+    }
+
+    this.cedulaLookupTimeout = window.setTimeout(() => {
+      const cedulaRegex = /^\d{10}$/;
+      if (!cedulaRegex.test(cedula)) {
+        this.cedulaError = 'Ingrese una cédula válida';
+        return;
+      }
+
+      this.fetchUsuarioPorCedula(cedula);
+    }, 400);
+  }
+
+  private fetchUsuarioPorCedula(cedula: string): void {
+    this.isCedulaLoading = true;
+    const localUsuario = this.findUsuarioInList(cedula);
+    if (localUsuario) {
+      this.applyUsuarioFromLookup(localUsuario, cedula);
+      this.isCedulaLoading = false;
+      return;
+    }
+
+    // Intentar endpoint específico si existe; si falla, usar listado
+    this.apiService.getUsuarioByCedula(cedula).subscribe({
+      next: usuario => {
+        if (usuario) {
+          this.applyUsuarioFromLookup(usuario, cedula);
+          this.cedulaError = '';
+        } else {
+          this.searchUsuarioInListado(cedula);
+        }
+        this.isCedulaLoading = false;
+      },
+      error: () => {
+        this.searchUsuarioInListado(cedula);
+      }
+    });
+  }
+
+  private searchUsuarioInListado(cedula: string): void {
+    this.apiService.getUsuarios().subscribe({
+      next: usuarios => {
+        const usuario = usuarios.find(u => this.cedulaMatches(cedula, this.getCedula(u)));
+        if (usuario) {
+          this.applyUsuarioFromLookup(usuario, cedula);
+          this.cedulaError = '';
+        } else {
+          this.nuevoUsuario.nombre = '';
+          this.nuevoUsuario.nombres_completos = '';
+          this.cedulaError = 'No se encontró la cédula';
+        }
+        this.isCedulaLoading = false;
+      },
+      error: () => {
+        this.nuevoUsuario.nombre = '';
+        this.nuevoUsuario.nombres_completos = '';
+        this.cedulaError = 'No se pudo validar la cédula';
+        this.isCedulaLoading = false;
+      }
+    });
+  }
+
+  private findUsuarioInList(cedula: string): Usuario | undefined {
+    if (!this.usuarios.length) return undefined;
+    return this.usuarios.find(u => this.cedulaMatches(cedula, this.getCedula(u)));
+  }
+
+  private applyUsuarioFromLookup(usuario: Usuario, cedulaFallback: string): void {
+    const nombre =
+      usuario.nombres_completos ||
+      usuario.nombreCompleto ||
+      usuario.nombre ||
+      '';
+    const cedulaRespuesta =
+      usuario.cedula ||
+      (usuario as any).cedulaUsuario ||
+      (usuario as any).numeroCedula ||
+      cedulaFallback;
+    const nombreNormalizado = nombre ? String(nombre).trim() : '';
+    this.nuevoUsuario.nombres_completos = nombreNormalizado;
+    this.nuevoUsuario.nombre = nombreNormalizado;
+    this.nuevoUsuario.cedula = cedulaRespuesta ? String(cedulaRespuesta).trim() : cedulaFallback;
+    if (!this.nuevoUsuario.nombres_completos) {
+      this.cedulaError = 'No se encontraron nombres';
+      return;
+    }
+
+    if (this.hasAssignedRole(usuario) && this.isUsuarioActivo(usuario)) {
+      this.usuarioYaCreado = true;
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'info',
+        title: 'Usuario ya creado',
+        text: 'Este usuario ya tiene rol y clave asignados.',
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true
+      });
+      return;
+    }
+
+    this.cedulaError = '';
+  }
+
+  hasNombreEncontrado(): boolean {
+    return !!(this.nuevoUsuario.nombres_completos || '').trim();
+  }
+
+  private normalizeCedula(value: unknown): string {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/\D/g, '');
+  }
+
+  private getRoleId(usuario: Usuario): number | null {
+    const idRol =
+      usuario.idRol ??
+      (usuario as any).id_rol ??
+      (usuario as any).idRol ??
+      usuario.rol?.idRol ??
+      (usuario as any).rol?.id ??
+      (usuario as any).rolId;
+    if (idRol === null || idRol === undefined) return null;
+    const parsed = Number(idRol);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  private hasAssignedRole(usuario: Usuario): boolean {
+    const idRol = this.getRoleId(usuario);
+    if (idRol && idRol > 0) return true;
+    const rolNombre =
+      usuario.rol?.nombre ||
+      (usuario as any).rolNombre ||
+      (usuario as any).rol;
+    return typeof rolNombre === 'string' && rolNombre.trim().length > 0;
+  }
+
+  private isUsuarioActivo(usuario: Usuario): boolean {
+    const estado =
+      usuario.estado ??
+      (usuario as any).activo ??
+      (usuario as any).isActive ??
+      true;
+    return estado === true;
+  }
+
+  private isCurrentUser(usuario: Usuario): boolean {
+    const current = this.authService.getCurrentUser();
+    if (!current) return false;
+    const currentCedula = this.normalizeCedula((current as any).cedula || current.email || '');
+    const usuarioCedula = this.normalizeCedula(this.getCedula(usuario));
+    return !!currentCedula && currentCedula === usuarioCedula;
+  }
+
+  private cedulaMatches(input: string, candidate: string): boolean {
+    const normalizedInput = this.normalizeCedula(input);
+    const normalizedCandidate = this.normalizeCedula(candidate);
+    if (!normalizedInput || !normalizedCandidate) return false;
+    if (normalizedInput === normalizedCandidate) return true;
+
+    const inputNoZeros = normalizedInput.replace(/^0+/, '');
+    const candidateNoZeros = normalizedCandidate.replace(/^0+/, '');
+    return !!inputNoZeros && inputNoZeros === candidateNoZeros;
+  }
+
 saveUsuario(): void {
-  if (!this.nuevoUsuario.nombre || !this.nuevoUsuario.email || !this.passwordTemp || !this.nuevoUsuario.idRol) {
+  if (this.isCedulaLoading) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Buscando usuario',
+      text: 'Espere un momento mientras se cargan los nombres',
+      confirmButtonColor: '#0d47a1'
+    });
+    return;
+  }
+
+  if (this.usuarioYaCreado) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Usuario ya creado',
+      text: 'No puede crear un usuario que ya tiene rol y clave.',
+      confirmButtonColor: '#0d47a1'
+    });
+    return;
+  }
+
+  if (!this.nuevoUsuario.cedula || !this.nuevoUsuario.nombres_completos || !this.passwordTemp || !this.nuevoUsuario.idRol || this.cedulaError) {
     Swal.fire({
       icon: 'warning',
       title: 'Campos incompletos',
@@ -142,17 +360,24 @@ saveUsuario(): void {
   const day = String(hoy.getDate()).padStart(2, '0');
   const fechaActual = `${year}-${month}-${day}`;
 
-  const usuario: Usuario = {
+  const payload = {
     idUsuario: 0,
-    nombre: this.nuevoUsuario.nombre,
-    email: this.nuevoUsuario.email,
+    nombre: this.nuevoUsuario.nombres_completos,
+    nombres_completos: this.nuevoUsuario.nombres_completos,
+    cedula: this.nuevoUsuario.cedula,
+    email: '',
     contraseña: this.passwordTemp,
+    contrasena: this.passwordTemp,
+    password: this.passwordTemp,
+    clave: this.passwordTemp,
     estado: this.nuevoUsuario.estado ?? true,
     fechaRegistro: fechaActual,
-    idRol: this.nuevoUsuario.idRol!
+    idRol: this.nuevoUsuario.idRol!,
+    id_rol: this.nuevoUsuario.idRol!,
+    rol: this.nuevoUsuario.idRol!
   };
 
-  this.apiService.createUsuario(usuario).subscribe({
+  this.apiService.createUsuario(payload).subscribe({
     next: u => {
       this.usuarios.push(u);
       this.filteredUsuarios = [...this.usuarios];
@@ -166,11 +391,27 @@ saveUsuario(): void {
         showConfirmButton: false
       });
     },
-    error: () => {
+    error: (error) => {
+      console.error('Error creando usuario:', error);
+      const rawError = error?.error;
+      const backendMessage =
+        rawError?.message ||
+        rawError?.error ||
+        (typeof rawError === 'string' ? rawError : '') ||
+        error?.message ||
+        '';
+      const backendDetails =
+        backendMessage ||
+        (rawError && typeof rawError === 'object'
+          ? JSON.stringify(rawError)
+          : '');
+      const status = error?.status ? ` (HTTP ${error.status})` : '';
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'No se pudo crear el usuario',
+        text: backendDetails
+          ? `${backendDetails}${status}`
+          : `No se pudo crear el usuario${status}`,
         confirmButtonColor: '#d32f2f'
       });
     }
@@ -296,6 +537,25 @@ deleteUsuario(usuario: Usuario): void {
     return 'Sin rol';
   }
 
+  getNombreCompleto(usuario: Usuario): string {
+    const nombre =
+      usuario.nombreCompleto ||
+      (usuario as any).nombres_completos ||
+      (usuario as any).nombresCompletos ||
+      usuario.nombre ||
+      '';
+    return nombre ? String(nombre).trim() : '—';
+  }
+
+  getCedula(usuario: Usuario): string {
+    const cedula =
+      usuario.cedula ||
+      (usuario as any).numeroCedula ||
+      (usuario as any).cedulaUsuario ||
+      '';
+    return cedula ? String(cedula) : '—';
+  }
+
  formatDate(fecha?: string | Date): string {
   if (!fecha) {
     return '—';
@@ -308,11 +568,20 @@ updateUsuario(): void {
   if (!this.usuarioEditId) return;
 
   const payload = {
-    nombre: this.nuevoUsuario.nombre,
-    email: this.nuevoUsuario.email,
+    nombres_completos: this.nuevoUsuario.nombre,
+    cedula: this.nuevoUsuario.cedula,
     estado: this.nuevoUsuario.estado,
     idRol: this.nuevoUsuario.idRol
   };
+
+  if (this.editPasswordTemp) {
+    Object.assign(payload, {
+      contraseña: this.editPasswordTemp,
+      contrasena: this.editPasswordTemp,
+      password: this.editPasswordTemp,
+      clave: this.editPasswordTemp
+    });
+  }
 
   this.apiService.updateUsuario(this.usuarioEditId, payload).subscribe({
     next: (usuarioActualizado) => {
@@ -356,14 +625,18 @@ openAddModal(): void {
 
   this.nuevoUsuario = {
     nombre: '',
+    nombres_completos: '',
+    cedula: '',
     email: '',
     estado: true,
     fechaRegistro: fechaActual,
     idRol: this.roles.length ? this.roles[0].idRol : 0
   };
 
-  this.  passwordTemp = '';
+  this.passwordTemp = '';
   this.showPassword = false;
+  this.isCedulaLoading = false;
+  this.cedulaError = '';
   this.showAddModal = true;
 }
 

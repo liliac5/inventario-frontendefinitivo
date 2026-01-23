@@ -9,28 +9,38 @@
     <div class="content-area">
       <h2 class="page-title">SOLICITUDES DE CAMBIO</h2>
 
-      <div class="table-container">
-        <table class="solicitudes-table">
-          <thead>
-            <tr>
-              <th>ID / ESTADO</th>
-              <th>DOCENTE / AULA</th>
-              <th>BIEN</th>
-              <th>TIPO DE SOLICITUD</th>
-              <th>DESCRIPCIÓN</th>
-              <th>ACCIONES</th>
-            </tr>
-          </thead>
+      <div class="content-card">
+        <div class="content-card-header">
+          <div>
+            <h3 class="card-title">Solicitudes registradas</h3>
+            <p class="card-subtitle">Revisa y procesa las solicitudes de cambio.</p>
+          </div>
+          <span class="card-count">{{ filteredSolicitudes.length }} solicitudes</span>
+        </div>
+
+        <div class="table-container">
+          <table class="solicitudes-table">
+            <thead>
+              <tr>
+                <th>ID / ESTADO</th>
+                <th>DOCENTE / AULA</th>
+                <th>BIEN</th>
+                <th>TIPO DE SOLICITUD</th>
+                <th>DESCRIPCIÓN</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
           <tbody>
             <tr *ngFor="let solicitud of filteredSolicitudes">
               <!-- ID / Estado -->
-              <td>
+              <td class="acciones-td">
                 <div class="id-estado-cell">
                   <span class="solicitud-id">#{{ solicitud.idSolicitud }}</span>
                   <span class="estado-badge"
                         [class.pendiente]="solicitud.estado === 'PENDIENTE'"
                         [class.aceptada]="solicitud.estado === 'APROBADA'"
                         [class.rechazada]="solicitud.estado === 'DENEGADA'">
+                    <span class="estado-dot"></span>
                     {{ solicitud.estado || 'PENDIENTE' }}
                   </span>
                 </div>
@@ -78,7 +88,8 @@
               <td colspan="7" class="no-data">No hay solicitudes registradas</td>
             </tr>
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   </div>

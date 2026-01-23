@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  email: string = '';
+  cedula: string = '';
   password: string = '';
   selectedRole: number = 1; // 1=Admin, 2=Coordinador, 3=Docente, 4=Usuario
   showPassword: boolean = false;
@@ -35,20 +35,20 @@ export class LoginComponent {
   login(): void {
   this.errorMessage = '';
 
-  if (!this.email || !this.password) {
-    this.errorMessage = 'Por favor, ingrese email y contraseña';
+  if (!this.cedula || !this.password) {
+    this.errorMessage = 'Por favor, ingrese cédula y contraseña';
     return;
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(this.email)) {
-    this.errorMessage = 'Por favor, ingrese un email válido';
+  const cedulaRegex = /^\d{10}$/;
+  if (!cedulaRegex.test(this.cedula)) {
+    this.errorMessage = 'Por favor, ingrese una cédula válida';
     return;
   }
 
   this.isLoading = true;
 
-  this.authService.login(this.email, this.password).subscribe({
+  this.authService.login(this.cedula, this.password).subscribe({
     next: (usuario) => {
       console.log('Login exitoso, usuario:', usuario);
       this.isLoading = false;
@@ -76,7 +76,7 @@ export class LoginComponent {
       if (error.error && error.error.message) {
         this.errorMessage = error.error.message;
       } else if (error.status === 401 || error.status === 403) {
-        this.errorMessage = 'Email o contraseña incorrectos';
+        this.errorMessage = 'Cédula o contraseña incorrectos';
       } else if (error.status === 0) {
         this.errorMessage = 'No se pudo conectar con el servidor. Verifique que el backend esté corriendo.';
       } else {

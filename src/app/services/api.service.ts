@@ -178,10 +178,17 @@ denegarSolicitud(id: number) {
     );
   }
 
-  createUsuario(usuario: Usuario): Observable<Usuario> {
+  getUsuarioByCedula(cedula: string): Observable<Usuario> {
+    return this.http.get<Usuario>(
+      `${this.baseUrl}/usuarios/cedula/${cedula}`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  createUsuario(payload: any): Observable<Usuario> {
     return this.http.post<Usuario>(
       `${this.baseUrl}/usuarios`,
-      usuario,
+      payload,
       { headers: this.getHeaders() }
     );
   }
@@ -189,7 +196,8 @@ denegarSolicitud(id: number) {
   updateUsuario(id: number, payload: any) {
   return this.http.put<Usuario>(
     `${this.baseUrl}/usuarios/${id}`,
-    payload
+    payload,
+    { headers: this.getHeaders() }
   );
 }
 

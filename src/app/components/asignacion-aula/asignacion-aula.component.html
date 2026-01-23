@@ -23,10 +23,16 @@
           <div class="form-fields">
             <div class="form-field">
               <label>Usuario *</label>
+                <input
+                  type="text"
+                  class="form-input select-filter"
+                  placeholder="Buscar usuario por nombre o cédula..."
+                  [(ngModel)]="usuarioFiltro"
+                  name="usuarioFiltro">
               <select [(ngModel)]="nuevoUsuarioId" class="form-input" required>
   <option [ngValue]="null">Seleccione un usuario</option>
-  <option *ngFor="let usuario of usuarios" [ngValue]="usuario.idUsuario">
-    {{ usuario.nombre }} ({{ usuario.email }})
+    <option *ngFor="let usuario of getUsuariosAsignablesFiltrados()" [ngValue]="usuario.idUsuario">
+    {{ getUsuarioDisplay(usuario) }}
   </option>
 </select>
             </div>
@@ -145,10 +151,16 @@
 
     <div class="form-field">
       <label>Usuario</label>
+      <input
+        type="text"
+        class="form-input select-filter"
+        placeholder="Buscar usuario por nombre o cédula..."
+        [(ngModel)]="usuarioFiltro"
+        name="usuarioFiltroEdit">
       <select [(ngModel)]="editUsuarioId">
-        <option *ngFor="let usuario of usuarios"
+        <option *ngFor="let usuario of getUsuariosAsignablesFiltrados()"
                 [value]="usuario.idUsuario">
-          {{ usuario.nombre }}
+          {{ getUsuarioDisplay(usuario) }}
         </option>
       </select>
     </div>

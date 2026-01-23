@@ -8,17 +8,21 @@
 
     <div class="content-area">
       <div class="main-title-section">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="title-icon">
-          <path d="M16 2L18 12H28L20 16L22 26L16 22L10 26L12 16L4 12H14L16 2Z" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-        <h2 class="main-title">Reportes de Incidencias</h2>
+        <div>
+          <h2 class="main-title">Reportes de Incidencias</h2>
+          <p class="main-subtitle">Registra daños y consulta el historial de reportes.</p>
+        </div>
       </div>
 
       <div class="content-grid">
         <!-- Formulario de Crear Reporte -->
         <div class="form-section">
-          <h3 class="section-title">Reportar Bien Dañado</h3>
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Reportar Bien Dañado</h3>
+              <p class="section-subtitle">Completa los datos del incidente.</p>
+            </div>
+          </div>
           
           <form (ngSubmit)="enviarReporte()">
             <div class="form-group">
@@ -78,7 +82,13 @@
 
         <!-- Historial de Reportes -->
         <div class="history-section">
-          <h3 class="section-title">Mis Reportes</h3>
+          <div class="section-header">
+            <div>
+              <h3 class="section-title">Mis Reportes</h3>
+              <p class="section-subtitle">Seguimiento de incidencias registradas.</p>
+            </div>
+            <span class="section-count">{{ misReportes.length }} reportes</span>
+          </div>
           
           <div class="table-container">
             <table class="reportes-table">

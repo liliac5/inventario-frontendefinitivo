@@ -8,17 +8,21 @@
 
     <div class="portal-content">
     <div class="main-title-section">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" class="title-icon">
-        <path d="M14 2L16 10H24L18 14L20 22L14 18L8 22L10 14L4 10H12L14 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
-        <rect x="6" y="6" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-      </svg>
-      <h2 class="main-title">Solicitud de Cambio de Aulas</h2>
+      <div>
+        <h2 class="main-title">Solicitud de Cambio de Aulas</h2>
+        <p class="main-subtitle">Registra tus solicitudes y revisa el historial en tiempo real.</p>
+      </div>
     </div>
 
     <div class="content-grid">
       <!-- Sección Crear Nueva Solicitud -->
       <div class="form-section">
-        <h3 class="section-title">Crear Nueva Solicitud</h3>
+        <div class="section-header">
+          <div>
+            <h3 class="section-title">Crear Nueva Solicitud</h3>
+            <p class="section-subtitle">Selecciona el aula, el bien y describe el requerimiento.</p>
+          </div>
+        </div>
         
         <form (ngSubmit)="enviarSolicitud()">
           <div class="form-group">
@@ -96,7 +100,13 @@
 
       <!-- Sección Historial -->
       <div class="history-section">
-        <h3 class="section-title">Historial de Mis Solicitudes</h3>
+        <div class="section-header">
+          <div>
+            <h3 class="section-title">Historial de Mis Solicitudes</h3>
+            <p class="section-subtitle">Seguimiento de solicitudes enviadas.</p>
+          </div>
+          <span class="section-count">{{ misSolicitudes.length }} solicitudes</span>
+        </div>
         
         <div class="table-container">
           <table class="solicitudes-table">
@@ -113,13 +123,14 @@
                 <td>{{ solicitud.bien?.aula?.nombre || 'N/A' }}</td>
                 <td>{{ getTipoSolicitud(solicitud) }}</td>
                 <td>{{ getDetalleSolicitud(solicitud) }}</td>
-<td>
-  <span 
-    [class]="'estado-badge ' + (solicitud.estado ? solicitud.estado.toLowerCase() : 'pendiente')"
-    [class.aprobada]="solicitud.estado === 'APROBADA'">
-    {{ solicitud.estado || 'PENDIENTE' }}
-  </span>
-</td>
+                <td>
+                  <span 
+                    [class]="'estado-badge ' + (solicitud.estado ? solicitud.estado.toLowerCase() : 'pendiente')"
+                    [class.aprobada]="solicitud.estado === 'APROBADA'">
+                    <span class="estado-dot"></span>
+                    {{ solicitud.estado || 'PENDIENTE' }}
+                  </span>
+                </td>
 
               </tr>
               <tr *ngIf="misSolicitudes.length === 0">

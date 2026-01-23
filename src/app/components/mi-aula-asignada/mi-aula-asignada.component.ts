@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Asignacion } from '../../models/asignacion.model';
 import { Aula } from '../../models/aula.model';
+import { Bien } from '../../models/bien.model';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -16,6 +17,8 @@ export class MiAulaAsignadaComponent implements OnInit {
   currentUserId: number = 0;
   miAsignacion: Asignacion | null = null;
   miAula: Aula | null = null;
+  bienes: Bien[] = [];
+  bienesAula: Bien[] = [];
 
   constructor(
     private router: Router,
@@ -40,6 +43,7 @@ export class MiAulaAsignadaComponent implements OnInit {
         this.miAsignacion = asignaciones.find(a => a.id_usuario === this.currentUserId && a.estado) || null;
         if (this.miAsignacion && this.miAsignacion.aula) {
           this.miAula = this.miAsignacion.aula;
+          this.loadBienesAula(this.miAula.idAula);
         } else if (this.miAsignacion) {
           this.loadAulaDetalle(this.miAsignacion.id_aula);
         }
@@ -54,9 +58,25 @@ export class MiAulaAsignadaComponent implements OnInit {
     this.apiService.getAulas().subscribe({
       next: (aulas) => {
         this.miAula = aulas.find(a => a.idAula === idAula) || null;
+        if (this.miAula) {
+          this.loadBienesAula(this.miAula.idAula);
+        }
       },
       error: (error) => {
         console.error('Error cargando aula:', error);
+      }
+    });
+  }
+
+  loadBienesAula(idAula: number): void {
+    this.apiService.getBienes().subscribe({
+      next: (bienes) => {
+        this.bienes = bienes || [];
+        this.bienesAula = this.bienes.filter(b => b.aula && b.aula.idAula === idAula);
+      },
+      error: (error) => {
+        console.error('Error cargando bienes:', error);
+        this.bienesAula = [];
       }
     });
   }

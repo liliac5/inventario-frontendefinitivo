@@ -77,16 +77,16 @@ export class AuthService {
     });
   }
 
- login(email: string, contraseña: string): Observable<Usuario> {
+ login(cedula: string, contraseña: string): Observable<Usuario> {
   return this.apiService.post<any>('auth/login', {
-    email: email,
+    cedula: cedula,
     password: contraseña
   }).pipe(
     map(response => {
       console.log('Respuesta del backend:', response);
       
       // El backend puede devolver diferentes estructuras, intentamos varias opciones
-      const emailResponse = response.email || response.emailUsuario || email;
+      const emailResponse = response.email || response.emailUsuario || response.cedula || cedula;
       const rolResponse = response.rol || response.role || response.idRol;
       const tokenResponse = response.token || response.jwt;
       const nombreResponse = response.nombre || response.nombreUsuario || '';

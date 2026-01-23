@@ -38,6 +38,7 @@ editAulaId: number = 0;
 editFecha: string = '';
 tituloAlerta = '';
 tipoAlerta: 'error' | 'success' = 'error';
+usuarioFiltro = '';
 
   constructor(
     private apiService: ApiService,
@@ -86,7 +87,10 @@ tipoAlerta: 'error' | 'success' = 'error';
   loadUsuarios(): void {
     this.apiService.getUsuarios().subscribe({
       next: (usuarios) => {
-        this.usuarios = usuarios;
+        const lista = Array.isArray(usuarios)
+          ? usuarios
+          : (usuarios as any)?.data || (usuarios as any)?.content || (usuarios as any)?.usuarios || [];
+        this.usuarios = lista;
       },
       error: (error) => {
         console.error('Error cargando usuarios:', error);
@@ -164,6 +168,67 @@ registrarAsignacion(): void {
   getUsuarioNombre(id_usuario: number): string {
     const usuario = this.usuarios.find(u => u.idUsuario === id_usuario);
     return usuario ? usuario.nombre : 'N/A';
+  }
+
+  getUsuariosAsignables(): Usuario[] {
+    return this.usuarios.filter(usuario => this.isUsuarioActivo(usuario) && this.hasAssignedRole(usuario));
+  }
+
+  getUsuariosAsignablesFiltrados(): Usuario[] {
+    const term = this.usuarioFiltro.trim().toLowerCase();
+    const usuarios = this.getUsuariosAsignables();
+    if (!term) return usuarios;
+    return usuarios.filter(usuario => {
+      const display = this.getUsuarioDisplay(usuario).toLowerCase();
+      return display.includes(term);
+    });
+  }
+
+  getUsuarioDisplay(usuario: Usuario): string {
+    const nombre =
+      usuario.nombres_completos ||
+      usuario.nombreCompleto ||
+      usuario.nombre ||
+      '';
+    const cedula =
+      usuario.cedula ||
+      (usuario as any).cedulaUsuario ||
+      (usuario as any).numeroCedula ||
+      '';
+    const nombreFinal = nombre ? String(nombre).trim() : 'Sin nombre';
+    const cedulaFinal = cedula ? String(cedula).trim() : 'Sin cédula';
+    return `${nombreFinal} (${cedulaFinal})`;
+  }
+
+  private isUsuarioActivo(usuario: Usuario): boolean {
+    const estado =
+      usuario.estado ??
+      (usuario as any).activo ??
+      (usuario as any).isActive ??
+      true;
+    return estado === true;
+  }
+
+  private getRoleId(usuario: Usuario): number | null {
+    const idRol =
+      usuario.idRol ??
+      (usuario as any).id_rol ??
+      (usuario as any).rolId ??
+      usuario.rol?.idRol ??
+      (usuario as any).rol?.id;
+    if (idRol === null || idRol === undefined) return null;
+    const parsed = Number(idRol);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  private hasAssignedRole(usuario: Usuario): boolean {
+    const idRol = this.getRoleId(usuario);
+    if (idRol && idRol > 0) return true;
+    const rolNombre =
+      usuario.rol?.nombre ||
+      (usuario as any).rolNombre ||
+      (usuario as any).rol;
+    return typeof rolNombre === 'string' && rolNombre.trim().length > 0;
   }
 
   getAulaNombre(idAula: number): string {

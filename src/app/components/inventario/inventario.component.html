@@ -31,58 +31,59 @@
         </div>
       </div>
 
-      <!-- ACCIONES -->
-      <div class="actions-bar">
-        <input
-          type="text"
-          class="search-input"
-          placeholder="BUSCAR POR CÓDIGO..."
-          [(ngModel)]="searchTerm"
-          name="searchTerm"
-          (input)="onSearch()"
-        />
+      <div class="content-card">
+        <!-- ACCIONES -->
+        <div class="actions-bar">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="BUSCAR POR CÓDIGO..."
+            [(ngModel)]="searchTerm"
+            name="searchTerm"
+            (input)="onSearch()"
+          />
 
-        <button class="add-button" type="button" (click)="openAddModal()">
-          Añadir Nuevo Bien
-        </button>
-
-        <button class="category-button" type="button" (click)="openCategoryModal()">
-          Nueva Categoría
-        </button>
-
-        <div class="filter-dropdown-wrapper">
-          <button class="show-all-button" type="button" (click)="toggleFilterDropdown()">
-            {{ selectedFilter }}
+          <button class="add-button" type="button" (click)="openAddModal()">
+            Añadir Nuevo Bien
           </button>
 
-          <div class="filter-dropdown" *ngIf="showFilterDropdown">
-            <button
-              *ngFor="let option of filterOptions"
-              type="button"
-              class="filter-option"
-              (click)="selectFilter(option)">
-              {{ option }}
+          <button class="category-button" type="button" (click)="openCategoryModal()">
+            Nueva Categoría
+          </button>
+
+          <div class="filter-dropdown-wrapper">
+            <button class="show-all-button" type="button" (click)="toggleFilterDropdown()">
+              {{ selectedFilter }}
             </button>
+
+            <div class="filter-dropdown" *ngIf="showFilterDropdown">
+              <button
+                *ngFor="let option of filterOptions"
+                type="button"
+                class="filter-option"
+                (click)="selectFilter(option)">
+                {{ option }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- TABLA -->
-      <div class="table-container">
-        <table class="inventario-table">
-          <thead>
-            <tr>
-              <th>CÓDIGO</th>
-              <th>NOMBRE</th>
-              <th>CATEGORÍA</th>
-              <th>TIPO</th>
-              <th>UBICACIÓN</th>
-              <th>AULA</th>
-              <th>ESTADO</th>
-              <th>VALOR</th>
-              <th>ACCIONES</th>
-            </tr>
-          </thead>
+        <!-- TABLA -->
+        <div class="table-container">
+          <table class="inventario-table">
+            <thead>
+              <tr>
+                <th>CÓDIGO</th>
+                <th>NOMBRE</th>
+                <th>CATEGORÍA</th>
+                <th>TIPO</th>
+                <th>UBICACIÓN</th>
+                <th>AULA</th>
+                <th>ESTADO</th>
+                <th>VALOR</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
 
         <tbody>
   <tr *ngFor="let bien of filteredBienes">
@@ -124,7 +125,8 @@
   </tr>
 </tbody>
 
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -134,205 +136,207 @@
 <div class="modal-overlay" *ngIf="showAddModal">
   <div class="modal-content large-modal">
 
-    <h2>Registrar Bien</h2>
+    <div class="modal-header">
+      <h2>Registrar Bien</h2>
+      <p class="modal-subtitle">Complete los datos principales del bien.</p>
+    </div>
 
     <form class="modal-form grid-form" (ngSubmit)="saveBien()">
 
-      <!-- Código -->
-      <div class="form-field">
-        <label>Código del bien</label>
-        <input type="text" [(ngModel)]="nuevoBien.codigoBien"
-               name="codigoBien" placeholder="BIEN-001" required>
+      <div class="form-section">
+        <h3 class="section-title">Identificación</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Código del bien</label>
+            <input type="text" [(ngModel)]="nuevoBien.codigoBien"
+                   name="codigoBien" placeholder="BIEN-001" required>
+          </div>
+
+          <div class="form-field">
+            <label>Código inventario</label>
+            <input type="text" [(ngModel)]="nuevoBien.codigoInventario"
+                   name="codigoInventario" placeholder="INV-2025-01" required>
+          </div>
+
+          <div class="form-field">
+            <label>Código SECAP</label>
+            <input type="text" [(ngModel)]="nuevoBien.codigoSecap"
+                   name="codigoSecap" placeholder="SEC-8899" required>
+          </div>
+
+          <div class="form-field">
+            <label>Cuenta tipo bien</label>
+            <input type="text" [(ngModel)]="nuevoBien.cuentaTipoBien"
+                   name="cuentaTipoBien" placeholder="1.2.3.04" required>
+          </div>
+        </div>
       </div>
 
-      <!-- Nombre -->
-      <div class="form-field">
-        <label>Nombre del bien</label>
-        <input type="text" [(ngModel)]="nuevoBien.nombreBien"
-               name="nombreBien" placeholder="Laptop Dell" required>
+      <div class="form-section">
+        <h3 class="section-title">Datos del bien</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Nombre del bien</label>
+            <input type="text" [(ngModel)]="nuevoBien.nombreBien"
+                   name="nombreBien" placeholder="Laptop Dell" required>
+          </div>
+
+          <div class="form-field">
+            <label>Tipo de bien</label>
+            <input type="text" [(ngModel)]="nuevoBien.tipoBien"
+                   name="tipoBien" placeholder="Electrónico" required>
+          </div>
+
+          <div class="form-field">
+            <label>Clase del bien</label>
+            <input type="text" [(ngModel)]="nuevoBien.claseBien"
+                   name="claseBien" placeholder="Activo fijo" required>
+          </div>
+
+          <div class="form-field">
+            <label>Categoría</label>
+            <select [(ngModel)]="nuevoBien.categoria.idCategoria"
+                    name="categoria"
+                    required>
+              <option [ngValue]="null">Seleccione una categoría</option>
+              <option *ngFor="let c of categorias" [ngValue]="c.idCategoria">
+                {{ c.nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <!-- Tipo -->
-      <div class="form-field">
-        <label>Tipo de bien</label>
-        <input type="text" [(ngModel)]="nuevoBien.tipoBien"
-               name="tipoBien" placeholder="Electrónico" required>
+      <div class="form-section">
+        <h3 class="section-title">Detalles técnicos</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Marca</label>
+            <input type="text" [(ngModel)]="nuevoBien.marca"
+                   name="marca" placeholder="Dell">
+          </div>
+
+          <div class="form-field">
+            <label>Modelo</label>
+            <input type="text" [(ngModel)]="nuevoBien.modelo"
+                   name="modelo" placeholder="Latitude 5420">
+          </div>
+
+          <div class="form-field">
+            <label>Serie</label>
+            <input type="text" [(ngModel)]="nuevoBien.serie"
+                   name="serie" placeholder="SN123456">
+          </div>
+
+          <div class="form-field full-width">
+            <label>Especificaciones</label>
+            <textarea [(ngModel)]="nuevoBien.especificaciones"
+                      name="especificaciones"
+                      placeholder="Especificaciones técnicas del bien"
+                      rows="3"></textarea>
+          </div>
+        </div>
       </div>
 
-      <!-- Clase -->
-      <div class="form-field">
-        <label>Clase del bien</label>
-        <input type="text" [(ngModel)]="nuevoBien.claseBien"
-               name="claseBien" placeholder="Activo fijo" required>
+      <div class="form-section">
+        <h3 class="section-title">Valores y ubicación</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Valor compra</label>
+            <input type="number" [(ngModel)]="nuevoBien.valorCompraInicial"
+                   name="valorCompraInicial" placeholder="850" required>
+          </div>
+
+          <div class="form-field">
+            <label>Valor con IVA</label>
+            <input type="number" [(ngModel)]="nuevoBien.valorConIva"
+                   name="valorConIva" placeholder="952" required>
+          </div>
+
+          <div class="form-field">
+            <label>Estado</label>
+            <select [(ngModel)]="nuevoBien.estado" name="estado" required>
+              <option value="">Seleccione</option>
+              <option>Disponible</option>
+              <option>Asignado</option>
+              <option>En Mantenimiento</option>
+              <option>Dañado</option>
+              <option>Baja</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label>Detalle del Estado</label>
+            <input type="text" [(ngModel)]="nuevoBien.detalleEstado"
+                   name="detalleEstado"
+                   placeholder="Detalle del estado actual">
+          </div>
+
+          <div class="form-field">
+            <label>Ubicación</label>
+            <input type="text" [(ngModel)]="nuevoBien.ubicacion"
+                   name="ubicacion" placeholder="Laboratorio 2" required>
+          </div>
+
+          <div class="form-field">
+            <label>Provincia</label>
+            <input type="text" [(ngModel)]="nuevoBien.provincia"
+                   name="provincia" placeholder="Pichincha" required>
+          </div>
+
+          <div class="form-field">
+            <label>Custodio</label>
+            <input type="text"
+                   [(ngModel)]="nuevoBien.custodio"
+                   name="custodio"
+                   placeholder="Nombre del custodio">
+          </div>
+
+          <div class="form-field">
+            <label>Aula (solo asignadas)</label>
+            <select
+              [(ngModel)]="nuevoBien.aula.idAula"
+              name="idAula"
+              (change)="onAulaSeleccionada(nuevoBien.aula.idAula)"
+            >
+              <option [ngValue]="null">Seleccione un aula</option>
+              <option *ngFor="let a of aulasAsignadas"
+                      [ngValue]="a.idAula">
+                {{ a.nombreAula }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <!-- Cuenta -->
-      <div class="form-field">
-        <label>Cuenta tipo bien</label>
-        <input type="text" [(ngModel)]="nuevoBien.cuentaTipoBien"
-               name="cuentaTipoBien" placeholder="1.2.3.04" required>
+      <div class="form-section">
+        <h3 class="section-title">Observaciones</h3>
+        <div class="form-grid">
+          <div class="form-field full-width">
+            <label>Descripción</label>
+            <textarea [(ngModel)]="nuevoBien.descripcion"
+                      name="descripcion"
+                      placeholder="Descripción detallada del bien"
+                      rows="3"></textarea>
+          </div>
+
+          <div class="form-field full-width">
+            <label>Observaciones</label>
+            <textarea [(ngModel)]="nuevoBien.observaciones"
+                      name="observaciones"
+                      placeholder="Observaciones generales"
+                      rows="3"></textarea>
+          </div>
+
+          <div class="form-field full-width">
+            <label>Observaciones Adicionales</label>
+            <textarea [(ngModel)]="nuevoBien.observaciones2"
+                      name="observaciones2"
+                      placeholder="Observaciones adicionales"
+                      rows="3"></textarea>
+          </div>
+        </div>
       </div>
-
-      <!-- Inventario -->
-      <div class="form-field">
-        <label>Código inventario</label>
-        <input type="text" [(ngModel)]="nuevoBien.codigoInventario"
-               name="codigoInventario" placeholder="INV-2025-01" required>
-      </div>
-
-      <!-- SECAP -->
-      <div class="form-field">
-        <label>Código SECAP</label>
-        <input type="text" [(ngModel)]="nuevoBien.codigoSecap"
-               name="codigoSecap" placeholder="SEC-8899" required>
-      </div>
-
-      <!-- Descripción -->
-      <div class="form-field full-width">
-        <label>Descripción</label>
-        <textarea [(ngModel)]="nuevoBien.descripcion"
-                  name="descripcion"
-                  placeholder="Descripción detallada del bien"
-                  rows="3"></textarea>
-      </div>
-
-      <!-- Especificaciones -->
-      <div class="form-field full-width">
-        <label>Especificaciones</label>
-        <textarea [(ngModel)]="nuevoBien.especificaciones"
-                  name="especificaciones"
-                  placeholder="Especificaciones técnicas del bien"
-                  rows="3"></textarea>
-      </div>
-
-      <!-- Marca -->
-      <div class="form-field">
-        <label>Marca</label>
-        <input type="text" [(ngModel)]="nuevoBien.marca"
-               name="marca" placeholder="Dell">
-      </div>
-
-      <!-- Modelo -->
-      <div class="form-field">
-        <label>Modelo</label>
-        <input type="text" [(ngModel)]="nuevoBien.modelo"
-               name="modelo" placeholder="Latitude 5420">
-      </div>
-
-      <!-- Serie -->
-      <div class="form-field">
-        <label>Serie</label>
-        <input type="text" [(ngModel)]="nuevoBien.serie"
-               name="serie" placeholder="SN123456">
-      </div>
-
-      <!-- Valores -->
-      <div class="form-field">
-        <label>Valor compra</label>
-        <input type="number" [(ngModel)]="nuevoBien.valorCompraInicial"
-               name="valorCompraInicial" placeholder="850" required>
-      </div>
-
-      <div class="form-field">
-        <label>Valor con IVA</label>
-        <input type="number" [(ngModel)]="nuevoBien.valorConIva"
-               name="valorConIva" placeholder="952" required>
-      </div>
-
-      <!-- Estado -->
-      <div class="form-field">
-        <label>Estado</label>
-        <select [(ngModel)]="nuevoBien.estado" name="estado" required>
-          <option value="">Seleccione</option>
-          <option>Disponible</option>
-          <option>Asignado</option>
-          <option>En Mantenimiento</option>
-          <option>Dañado</option>
-          <option>Baja</option>
-        </select>
-      </div>
-
-      <!-- Detalle Estado -->
-      <div class="form-field">
-        <label>Detalle del Estado</label>
-        <input type="text" [(ngModel)]="nuevoBien.detalleEstado"
-               name="detalleEstado"
-               placeholder="Detalle del estado actual">
-      </div>
-
-      <!-- Custodio -->
-      <div class="form-field">
-        <label>Custodio</label>
-        <input type="text" 
-               [(ngModel)]="nuevoBien.custodio"
-               name="custodio"
-               placeholder="Nombre del custodio">
-      </div>
-
-      <!-- Ubicación -->
-      <div class="form-field">
-        <label>Ubicación</label>
-        <input type="text" [(ngModel)]="nuevoBien.ubicacion"
-               name="ubicacion" placeholder="Laboratorio 2" required>
-      </div>
-
-      <!-- Provincia -->
-      <div class="form-field">
-        <label>Provincia</label>
-        <input type="text" [(ngModel)]="nuevoBien.provincia"
-               name="provincia" placeholder="Pichincha" required>
-      </div>
-
-      <!-- Observaciones -->
-      <div class="form-field full-width">
-        <label>Observaciones</label>
-        <textarea [(ngModel)]="nuevoBien.observaciones"
-                  name="observaciones"
-                  placeholder="Observaciones generales"
-                  rows="3"></textarea>
-      </div>
-
-      <!-- Observaciones 2 -->
-      <div class="form-field full-width">
-        <label>Observaciones Adicionales</label>
-        <textarea [(ngModel)]="nuevoBien.observaciones2"
-                  name="observaciones2"
-                  placeholder="Observaciones adicionales"
-                  rows="3"></textarea>
-      </div>
-
-      <!-- Categoría -->
-      <div class="form-field">
-        <label>Categoría</label>
-     <select
-  [(ngModel)]="nuevoBien.categoria.idCategoria"
-  name="categoria"
-  required
->
-  <option [ngValue]="null">Seleccione una categoría</option>
-  <option *ngFor="let c of categorias" [ngValue]="c.idCategoria">
-    {{ c.nombre }}
-  </option>
-</select>
-      </div>
-
-      <!-- Aula -->
-<div class="form-field">
-  <label>Aula (solo asignadas)</label>
-  <select
-    [(ngModel)]="nuevoBien.aula.idAula"
-    name="idAula"
-    (change)="onAulaSeleccionada(nuevoBien.aula.idAula)"
-  >
-    <option [ngValue]="null">Seleccione un aula</option>
-
-    <option
-      *ngFor="let a of aulasAsignadas"
-      [ngValue]="a.idAula">
-      {{ a.nombreAula }}
-    </option>
-  </select>
-</div>
 
       <div class="modal-actions full-width">
         <button type="submit" class="btn-save">Guardar</button>
@@ -351,26 +355,35 @@
 <div class="modal-overlay" *ngIf="showCategoryModal">
   <div class="modal-content">
 
-    <h2>Nueva Categoría</h2>
+    <div class="modal-header">
+      <h2>Nueva Categoría</h2>
+      <p class="modal-subtitle">Cree una categoría para clasificar bienes.</p>
+    </div>
 
-    <form class="modal-form" (ngSubmit)="saveCategoria()">
+    <form class="modal-form grid-form" (ngSubmit)="saveCategoria()">
 
-      <div class="form-field">
-        <label>Nombre de la categoría</label>
-        <input
-          type="text"
-          [(ngModel)]="nuevaCategoria.nombre"
-          name="nombre"
-          required
-        />
-      </div>
+      <div class="form-section">
+        <h3 class="section-title">Información</h3>
+        <div class="form-grid">
+          <div class="form-field full-width">
+            <label>Nombre de la categoría</label>
+            <input
+              type="text"
+              [(ngModel)]="nuevaCategoria.nombre"
+              name="nombre"
+              required
+            />
+          </div>
 
-      <div class="form-field">
-        <label>Descripción</label>
-        <textarea
-          [(ngModel)]="nuevaCategoria.descripcion"
-          name="descripcion">
-        </textarea>
+          <div class="form-field full-width">
+            <label>Descripción</label>
+            <textarea
+              [(ngModel)]="nuevaCategoria.descripcion"
+              name="descripcion"
+              rows="3">
+            </textarea>
+          </div>
+        </div>
       </div>
 
       <div class="modal-actions">

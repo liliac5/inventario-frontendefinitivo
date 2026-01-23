@@ -14,72 +14,79 @@
         <span class="aula-value">{{ miAula.nombre }}</span>
       </div>
 
-      <p class="intro-text">
-        Esta es la información de su aula asignada para el semestre actual. Utilice estos datos para planificar sus actividades y reportar incidentes con precisión.
-      </p>
+      <div class="info-banner">
+        <p>
+          Esta es la información de su aula asignada para el semestre actual. Utilice estos datos para planificar sus actividades y reportar incidentes con precisión.
+        </p>
+      </div>
 
       <div class="info-sections">
-        <!-- Sección Mobiliario y Capacidad -->
         <div class="info-section">
-          <h3 class="section-header">Mobiliario y Capacidad</h3>
-          <div class="info-grid">
-            <div class="info-item">
-              <span class="info-label">Capacidad Máxima:</span>
-              <span class="info-value">40 Pupitres</span>
+          <div class="section-header-row">
+            <div>
+              <h3 class="section-header">Inventario del Aula</h3>
+              <p class="section-subtitle">Listado de bienes asignados al aula.</p>
             </div>
-            <div class="info-item">
-              <span class="info-label">Tipo de Mobiliario:</span>
-              <span class="info-value">Sillas individuales con paleta</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Escritorio del Docente:</span>
-              <span class="info-value">Mesa grande con cerradura</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Pizarrón:</span>
-              <span class="info-value">Pizarra Acrílica (3m x 1.2m)</span>
-            </div>
+            <span class="section-count">{{ bienesAula.length }} bienes</span>
           </div>
-        </div>
 
-        <!-- Sección Equipamiento Tecnológico -->
-        <div class="info-section">
-          <h3 class="section-header">Equipamiento Tecnológico</h3>
-          <div class="info-grid">
-            <div class="info-item">
-              <span class="info-label">Proyector Instalado:</span>
-              <span class="info-value">Si (HDMI, VGA)</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Conexión a Internet (WiFi):</span>
-              <span class="info-value">Red 'Campus-Secure'</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Sistema de Audio:</span>
-              <span class="info-value">Parlantes de techo</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Computador de Cátedra:</span>
-              <span class="info-value">Disponible (Windows 11)</span>
-            </div>
+          <div *ngIf="bienesAula.length === 0" class="empty-state">
+            <div class="empty-dot"></div>
+            <span>No hay bienes registrados para esta aula.</span>
           </div>
-        </div>
 
-        <!-- Sección Servicios e Infraestructura -->
-        <div class="info-section">
-          <h3 class="section-header">Servicios e Infraestructura</h3>
-          <div class="info-grid">
-            <div class="info-item">
-              <span class="info-label">Aire Acondicionado:</span>
-              <span class="info-value">Funcional</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Iluminación:</span>
-              <span class="info-value">Lámparas LED (Buen estado)</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Ventanas:</span>
-              <span class="info-value">Con cortinas Blackout</span>
+          <div class="info-grid" *ngIf="bienesAula.length > 0">
+            <div class="info-item" *ngFor="let bien of bienesAula">
+              <span class="info-label">ID:</span>
+              <span class="info-value">{{ bien.idBien }}</span>
+              <span class="info-label">Código Bien:</span>
+              <span class="info-value">{{ bien.codigo_bien || 'N/A' }}</span>
+              <span class="info-label">Código Inventario:</span>
+              <span class="info-value">{{ bien.codigo_inventario || 'N/A' }}</span>
+              <span class="info-label">Código Secap:</span>
+              <span class="info-value">{{ bien.codigo_secap || 'N/A' }}</span>
+              <span class="info-label">Nombre:</span>
+              <span class="info-value">{{ bien.nombreBien || 'N/A' }}</span>
+              <span class="info-label">Descripción:</span>
+              <span class="info-value">{{ bien.descripcion || 'N/A' }}</span>
+              <span class="info-label">Tipo:</span>
+              <span class="info-value">{{ bien.tipo_bien || 'N/A' }}</span>
+              <span class="info-label">Clase:</span>
+              <span class="info-value">{{ bien.clase_bien || 'N/A' }}</span>
+              <span class="info-label">Cuenta Tipo Bien:</span>
+              <span class="info-value">{{ bien.cuenta_tipo_bien || 'N/A' }}</span>
+              <span class="info-label">Marca:</span>
+              <span class="info-value">{{ bien.marca || 'N/A' }}</span>
+              <span class="info-label">Modelo:</span>
+              <span class="info-value">{{ bien.modelo || 'N/A' }}</span>
+              <span class="info-label">Serie:</span>
+              <span class="info-value">{{ bien.serie || 'N/A' }}</span>
+              <span class="info-label">Especificaciones:</span>
+              <span class="info-value">{{ bien.especificaciones || 'N/A' }}</span>
+              <span class="info-label">Estado:</span>
+              <span class="info-value">{{ bien.estado || 'N/A' }}</span>
+              <span class="info-label">Detalle Estado:</span>
+              <span class="info-value">{{ bien.detalle_estado || 'N/A' }}</span>
+              <span class="info-label">Origen:</span>
+              <span class="info-value">{{ bien.origen || 'N/A' }}</span>
+              <span class="info-label">Provincia:</span>
+              <span class="info-value">{{ bien.provincia || 'N/A' }}</span>
+              <span class="info-label">Ubicación:</span>
+              <span class="info-value">{{ bien.ubicacion || 'N/A' }}</span>
+              <span class="info-label">Custodio:</span>
+              <span class="info-value">{{ bien.custodio || 'N/A' }}</span>
+              <span class="info-label">Valor Compra Inicial:</span>
+              <span class="info-value">{{ bien.valor_compra_inicial || 'N/A' }}</span>
+              <span class="info-label">Valor con IVA:</span>
+              <span class="info-value">{{ bien.valor_con_iva || 'N/A' }}</span>
+              <span class="info-label">Observaciones:</span>
+              <span class="info-value">{{ bien.observaciones || 'N/A' }}</span>
+              <span class="info-label">Observaciones 2:</span>
+              <span class="info-value">{{ bien.observaciones2 || 'N/A' }}</span>
+              <span class="info-label">Categoría:</span>
+              <span class="info-value">{{ bien.categoria?.nombre || 'N/A' }}</span>
+              <span class="info-label">Aula:</span>
+              <span class="info-value">{{ bien.aula?.nombre || miAula?.nombre || 'N/A' }}</span>
             </div>
           </div>
         </div>
@@ -87,6 +94,12 @@
 
       <div class="action-button-container">
         <button class="btn-formulario" (click)="irAlFormulario()">
+          <span class="btn-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path d="M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M11 5L16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
           Ir al Formulario de Solicitudes
         </button>
       </div>

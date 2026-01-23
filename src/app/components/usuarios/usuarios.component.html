@@ -9,84 +9,86 @@
     <div class="content-area">
       <h2 class="page-title">GESTION DE USUARIOS</h2>
 
-      <div class="actions-bar">
-        <div class="search-wrapper">
-          <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            <path d="M13 13 L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          <input 
-            type="text" 
-            class="search-input" 
-            placeholder="Buscar por nombre..."
-            [(ngModel)]="searchTerm"
-            (input)="onSearch()">
+      <div class="content-card">
+        <div class="actions-bar">
+          <div class="search-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M13 13 L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Buscar por nombre..."
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()">
+          </div>
+          <button class="add-button" (click)="openAddModal()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 5 L10 15 M5 10 L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Crear Usuario
+          </button>
         </div>
-        <button class="add-button" (click)="openAddModal()">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M10 5 L10 15 M5 10 L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          Crear Usuario
-        </button>
-      </div>
 
-      <div class="table-container">
-        <table class="usuarios-table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Rol</th>
-              <th>Fecha Registro</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let usuario of filteredUsuarios">
-              <td>{{ usuario.nombre }}</td>
-              <td>{{ usuario.email }}</td>
-              <td>
-                <span class="rol-badge" 
-                      [class.admin]="getRolNombre(usuario.idRol, usuario) === 'Admin' || getRolNombre(usuario.idRol, usuario) === 'ADMINISTRADOR' || getRolNombre(usuario.idRol, usuario) === 'Administrador'" 
-                      [class.coordinador]="getRolNombre(usuario.idRol, usuario) === 'Coordinador' || getRolNombre(usuario.idRol, usuario) === 'COORDINADOR'" 
-                      [class.docente]="getRolNombre(usuario.idRol, usuario) === 'Docente' || getRolNombre(usuario.idRol, usuario) === 'DOCENTE'"
-                      [class.usuario]="getRolNombre(usuario.idRol, usuario) === 'Usuario' || getRolNombre(usuario.idRol, usuario) === 'USUARIO'">
+        <div class="table-container">
+          <table class="usuarios-table">
+            <thead>
+              <tr>
+                <th>Nombre Completo</th>
+                <th>Cédula</th>
+                <th>Rol</th>
+                <th>Fecha Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of filteredUsuarios">
+                <td>{{ getNombreCompleto(usuario) }}</td>
+                <td>{{ getCedula(usuario) }}</td>
+                <td>
+                  <span class="rol-badge" 
+                        [class.admin]="getRolNombre(usuario.idRol, usuario) === 'Admin' || getRolNombre(usuario.idRol, usuario) === 'ADMINISTRADOR' || getRolNombre(usuario.idRol, usuario) === 'Administrador'" 
+                        [class.coordinador]="getRolNombre(usuario.idRol, usuario) === 'Coordinador' || getRolNombre(usuario.idRol, usuario) === 'COORDINADOR'" 
+                        [class.docente]="getRolNombre(usuario.idRol, usuario) === 'Docente' || getRolNombre(usuario.idRol, usuario) === 'DOCENTE'"
+                        [class.usuario]="getRolNombre(usuario.idRol, usuario) === 'Usuario' || getRolNombre(usuario.idRol, usuario) === 'USUARIO'">
 {{ usuario.rol?.nombre || getRolNombre(usuario.idRol, usuario) }}
-                </span>
-              </td>
-              <td>{{ formatDate(usuario.fechaRegistro) }}</td>
-              <td>
-                <span class="status-badge" [class.active]="usuario.estado" [class.inactive]="!usuario.estado">
-                  {{ usuario.estado ? 'Activo' : 'Inactivo' }}
-                </span>
-              </td>
-              <td>
-                <div class="action-buttons">
-                  <button class="action-btn delete-btn" (click)="deleteUsuario(usuario)" title="Eliminar">
-                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                      <path d="M5 5 L15 15 M15 5 L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                  </button>
-                  <button class="action-btn edit-btn"
-                    (click)="openEditModal(usuario)"
-                     title="Editar">
+                  </span>
+                </td>
+                <td>{{ formatDate(usuario.fechaRegistro) }}</td>
+                <td>
+                  <span class="status-badge" [class.active]="usuario.estado" [class.inactive]="!usuario.estado">
+                    {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn delete-btn" (click)="deleteUsuario(usuario)" title="Eliminar">
                       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                       <path d="M4 14 L14 4" stroke="currentColor" stroke-width="2"/>
-                     <path d="M4 14 L4 16 L6 16 L16 6 L14 4 Z"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          fill="none"/>
-                     </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="filteredUsuarios.length === 0">
-              <td colspan="6" class="no-data">No hay usuarios registrados</td>
-            </tr>
-          </tbody>
-        </table>
+                        <path d="M5 5 L15 15 M15 5 L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                    <button class="action-btn edit-btn"
+                      (click)="openEditModal(usuario)"
+                       title="Editar">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                         <path d="M4 14 L14 4" stroke="currentColor" stroke-width="2"/>
+                       <path d="M4 14 L4 16 L6 16 L16 6 L14 4 Z"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            fill="none"/>
+                       </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredUsuarios.length === 0">
+                <td colspan="6" class="no-data">No hay usuarios registrados</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -96,112 +98,129 @@
 <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closeAddModal()">×</button>
-    <h2 class="modal-title">Crear Usuario</h2>
+    <div class="modal-header">
+      <h2 class="modal-title">Crear Usuario</h2>
+      <p class="modal-subtitle">Ingrese la cédula para cargar los datos.</p>
+      <div class="modal-steps">
+        <span class="step-chip" [class.active]="true">1. Identificación</span>
+        <span class="step-chip" [class.active]="hasNombreEncontrado() && !usuarioYaCreado">2. Acceso</span>
+        <span class="step-chip" [class.active]="hasNombreEncontrado() && !usuarioYaCreado">3. Registro</span>
+      </div>
+    </div>
     
-    <form class="modal-form"
+    <form class="modal-form grid-form"
           #formUsuario="ngForm"
           (ngSubmit)="saveUsuario()">
 
-      <div class="form-fields">
-
-        <!-- NOMBRE -->
-        <div class="form-field">
-          <label>Nombre Completo *</label>
-          <input type="text"
-                 name="nombre"
-                 [(ngModel)]="nuevoUsuario.nombre"
-                 placeholder="Nombre del usuario"
-                 required
-                 minlength="3"
-                 pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
-                 #nombre="ngModel">
-
-          <small class="error" *ngIf="nombre.invalid && nombre.touched">
-            <span *ngIf="nombre.errors?.['required']">El nombre es obligatorio.</span>
-            <span *ngIf="nombre.errors?.['minlength']">Mínimo 3 caracteres.</span>
-            <span *ngIf="nombre.errors?.['pattern']">Solo letras y espacios.</span>
-          </small>
-        </div>
-
-        <!-- EMAIL -->
-        <div class="form-field">
-          <label>Email *</label>
-          <input type="email"
-                 name="email"
-                 [(ngModel)]="nuevoUsuario.email"
-                 placeholder="usuario@ejemplo.com"
-                 required
-                 email
-                 #email="ngModel">
-
-          <small class="error" *ngIf="email.invalid && email.touched">
-            <span *ngIf="email.errors?.['required']">El email es obligatorio.</span>
-            <span *ngIf="email.errors?.['email']">Formato de email inválido.</span>
-          </small>
-        </div>
-
-        <!-- CONTRASEÑA -->
-        <div class="form-field">
-          <label>Contraseña *</label>
-          <div class="input-wrapper">
-            <input [type]="showPassword ? 'text' : 'password'"
-                   name="password"
-                   [(ngModel)]="passwordTemp"
-                   placeholder="Contraseña segura"
+      <div class="form-section">
+        <h3 class="section-title">Identificación</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Cédula *</label>
+            <input type="text"
+                   name="cedula"
+                   [(ngModel)]="nuevoUsuario.cedula"
+                   placeholder="Ingrese la cédula"
                    required
-                   minlength="8"
-                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
-                   #password="ngModel">
+                   inputmode="numeric"
+                   pattern="\\d*"
+                   (input)="onCedulaInput()"
+                   #cedula="ngModel">
 
-            <button type="button"
-                    class="eye-icon"
-                    (click)="togglePasswordVisibility()">
-              👁
-            </button>
+            <small class="error" *ngIf="cedulaError">
+              {{ cedulaError }}
+            </small>
           </div>
 
-          <small class="error" *ngIf="password.invalid && password.touched">
-            <span *ngIf="password.errors?.['required']">La contraseña es obligatoria.</span>
-            <span *ngIf="password.errors?.['minlength']">Mínimo 8 caracteres.</span>
-            <span *ngIf="password.errors?.['pattern']">
-              Debe contener mayúscula, minúscula y número.
-            </span>
+          <div class="form-field full-width" *ngIf="hasNombreEncontrado() && !usuarioYaCreado">
+            <label>Nombre Completo *</label>
+            <input type="text"
+                   name="nombre"
+                   [(ngModel)]="nuevoUsuario.nombres_completos"
+                   placeholder="Se carga automáticamente"
+                   readonly
+                   disabled
+                   required
+                   #nombre="ngModel">
+          </div>
+        </div>
+
+        <div class="status-row">
+          <small class="info" *ngIf="isCedulaLoading">Cargando usuario...</small>
+          <small class="info" *ngIf="!isCedulaLoading && !cedulaError && !hasNombreEncontrado()">
+            Ingrese la cédula para cargar el usuario.
           </small>
         </div>
+      </div>
 
-        <!-- ROL -->
-        <div class="form-field">
-          <label>Rol *</label>
-          <select name="idRol"
-                  [(ngModel)]="nuevoUsuario.idRol"
-                  required
-                  #rol="ngModel">
-            <option [ngValue]="0">Seleccione un rol</option>
-            <option *ngFor="let rol of roles" [ngValue]="rol.idRol">
-              {{ rol.nombre }}
-            </option>
-          </select>
+      <div class="form-section" *ngIf="hasNombreEncontrado() && !usuarioYaCreado">
+        <h3 class="section-title">Acceso</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Contraseña *</label>
+            <div class="input-wrapper">
+              <input [type]="showPassword ? 'text' : 'password'"
+                     name="password"
+                     [(ngModel)]="passwordTemp"
+                     placeholder="Contraseña segura"
+                     required
+                     minlength="8"
+                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"
+                     #password="ngModel">
 
-          <small class="error" *ngIf="rol.invalid && rol.touched">
-            Debe seleccionar un rol.
-          </small>
+              <button type="button"
+                      class="eye-icon"
+                      (click)="togglePasswordVisibility()">
+                👁
+              </button>
+            </div>
+
+            <small class="error" *ngIf="password.invalid && password.touched">
+              <span *ngIf="password.errors?.['required']">La contraseña es obligatoria.</span>
+              <span *ngIf="password.errors?.['minlength']">Mínimo 8 caracteres.</span>
+              <span *ngIf="password.errors?.['pattern']">
+                Debe contener mayúscula, minúscula y número.
+              </span>
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label>Rol *</label>
+            <select name="idRol"
+                    [(ngModel)]="nuevoUsuario.idRol"
+                    required
+                    #rol="ngModel">
+              <option [ngValue]="0">Seleccione un rol</option>
+              <option *ngFor="let rol of roles" [ngValue]="rol.idRol">
+                {{ rol.nombre }}
+              </option>
+            </select>
+
+            <small class="error" *ngIf="rol.invalid && rol.touched">
+              Debe seleccionar un rol.
+            </small>
+          </div>
         </div>
+      </div>
 
-        <!-- FECHA -->
-        <div class="form-field">
-          <label>Fecha de Registro</label>
-          <input type="date"
-                 name="fechaRegistro"
-                 [value]="today"
-                 readonly
-                 disabled>
+      <div class="form-section" *ngIf="hasNombreEncontrado() && !usuarioYaCreado">
+        <h3 class="section-title">Registro</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Fecha de Registro</label>
+            <input type="date"
+                   name="fechaRegistro"
+                   [value]="today"
+                   readonly
+                   disabled>
+          </div>
         </div>
-
       </div>
       
       <div class="modal-actions">
         <button type="submit"
-                class="btn-save">
+                class="btn-save"
+                [disabled]="usuarioYaCreado">
           Guardar Usuario
         </button>
 
@@ -219,44 +238,88 @@
 <div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closeEditModal()">×</button>
-    <h2 class="modal-title">Editar Usuario</h2>
+    <div class="modal-header">
+      <h2 class="modal-title">Editar Usuario</h2>
+      <p class="modal-subtitle">Actualice rol, estado o contraseña.</p>
+    </div>
 
-    <form class="modal-form" (ngSubmit)="updateUsuario()">
-      <div class="form-fields">
+    <form class="modal-form grid-form" (ngSubmit)="updateUsuario()">
+      <div class="form-section">
+        <h3 class="section-title">Identificación</h3>
+        <div class="form-grid">
+          <div class="form-field full-width">
+            <label>Nombre Completo *</label>
+            <input type="text"
+                   [(ngModel)]="nuevoUsuario.nombres_completos"
+                   name="nombre"
+                   readonly
+                   disabled
+                   required>
+          </div>
 
-        <div class="form-field">
-          <label>Nombre Completo *</label>
-          <input type="text"
-                 [(ngModel)]="nuevoUsuario.nombre"
-                 name="nombre"
-                 required>
+          <div class="form-field">
+            <label>Cédula *</label>
+            <input type="text"
+                   [(ngModel)]="nuevoUsuario.cedula"
+                   name="cedula"
+                   readonly
+                   disabled
+                   required>
+          </div>
         </div>
+      </div>
 
-        <div class="form-field">
-          <label>Email *</label>
-          <input type="email"
-                 [(ngModel)]="nuevoUsuario.email"
-                 name="email"
-                 required>
+      <div class="form-section">
+        <h3 class="section-title">Acceso</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Contraseña (opcional)</label>
+            <div class="input-wrapper">
+              <input [type]="showPassword ? 'text' : 'password'"
+                     [(ngModel)]="editPasswordTemp"
+                     name="editPassword"
+                     placeholder="Nueva contraseña"
+                     minlength="8"
+                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
+                     #editPassword="ngModel">
+
+              <button type="button"
+                      class="eye-icon"
+                      (click)="togglePasswordVisibility()">
+                👁
+              </button>
+            </div>
+
+            <small class="error" *ngIf="editPassword.invalid && editPassword.touched">
+              <span *ngIf="editPassword.errors?.['minlength']">Mínimo 8 caracteres.</span>
+              <span *ngIf="editPassword.errors?.['pattern']">
+                Debe contener mayúscula, minúscula y número.
+              </span>
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label>Rol *</label>
+            <select [(ngModel)]="nuevoUsuario.idRol" name="idRol" required>
+              <option *ngFor="let rol of roles" [value]="rol.idRol">
+                {{ rol.nombre }}
+              </option>
+            </select>
+          </div>
         </div>
+      </div>
 
-        <div class="form-field">
-          <label>Rol *</label>
-          <select [(ngModel)]="nuevoUsuario.idRol" name="idRol" required>
-            <option *ngFor="let rol of roles" [value]="rol.idRol">
-              {{ rol.nombre }}
-            </option>
-          </select>
+      <div class="form-section">
+        <h3 class="section-title">Estado</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Estado</label>
+            <select [(ngModel)]="nuevoUsuario.estado" name="estado">
+              <option [ngValue]="true">Activo</option>
+              <option [ngValue]="false">Inactivo</option>
+            </select>
+          </div>
         </div>
-
-        <div class="form-field">
-          <label>Estado</label>
-          <select [(ngModel)]="nuevoUsuario.estado" name="estado">
-            <option [ngValue]="true">Activo</option>
-            <option [ngValue]="false">Inactivo</option>
-          </select>
-        </div>
-
       </div>
 
       <div class="modal-actions">

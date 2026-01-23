@@ -221,6 +221,18 @@ body.sidebar-collapsed .content-area {
   flex-wrap: wrap;
 }
 
+.content-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.content-card .actions-bar {
+  margin-bottom: 18px;
+}
+
 .search-wrapper {
   flex: 1;
   position: relative;
@@ -266,97 +278,53 @@ body.sidebar-collapsed .content-area {
 }
 
 .add-button {
-  background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 50%, #ffa726 100%);
+  background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
   color: white;
   border: none;
-  border-radius: 14px;
-  padding: 16px 38px;
-  font-size: 15px;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: 
-    0 6px 20px rgba(255, 111, 0, 0.35),
-    0 2px 8px rgba(255, 111, 0, 0.2);
-  letter-spacing: 0.8px;
+  box-shadow: 0 8px 18px rgba(255, 111, 0, 0.3);
+  letter-spacing: 0.4px;
   text-transform: uppercase;
-  position: relative;
-  overflow: hidden;
-}
-
-.add-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.add-button:hover::before {
-  left: 100%;
 }
 
 .add-button:hover {
-  background: linear-gradient(135deg, #ff8f00 0%, #ffa726 50%, #ffb74d 100%);
-  transform: translateY(-3px);
-  box-shadow: 
-    0 10px 30px rgba(255, 111, 0, 0.45),
-    0 4px 12px rgba(255, 111, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(255, 111, 0, 0.4);
 }
 
 .add-button:active {
-  transform: translateY(-1px);
+  transform: translateY(0);
 }
 
 .category-button {
-  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
   color: white;
   border: none;
-  border-radius: 14px;
-  padding: 16px 38px;
-  font-size: 15px;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: 
-    0 6px 20px rgba(26, 35, 126, 0.35),
-    0 2px 8px rgba(26, 35, 126, 0.2);
-  letter-spacing: 0.8px;
+  box-shadow: 0 8px 18px rgba(26, 35, 126, 0.28);
+  letter-spacing: 0.4px;
   text-transform: uppercase;
-  position: relative;
-  overflow: hidden;
-}
-
-.category-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.category-button:hover::before {
-  left: 100%;
 }
 
 .category-button:hover {
-  background: linear-gradient(135deg, #283593 0%, #3949ab 50%, #5c6bc0 100%);
-  transform: translateY(-3px);
-  box-shadow: 
-    0 10px 30px rgba(26, 35, 126, 0.45),
-    0 4px 12px rgba(26, 35, 126, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(26, 35, 126, 0.4);
 }
 
 .category-button:active {
-  transform: translateY(-1px);
+  transform: translateY(0);
 }
 
 .filter-dropdown-wrapper {
@@ -365,21 +333,21 @@ body.sidebar-collapsed .content-area {
 }
 
 .show-all-button {
-  background: white;
-  color: #333;
-  border: 2px solid #e8eaf6;
-  border-radius: 14px;
-  padding: 16px 28px;
-  font-size: 14px;
-  font-weight: 600;
+  background: #f8fafc;
+  color: #1a237e;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  min-width: 180px;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+  min-width: 160px;
   justify-content: space-between;
 }
 
@@ -387,9 +355,6 @@ body.sidebar-collapsed .content-area {
   border-color: #ff6f00;
   color: #ff6f00;
   background: #fff8e1;
-  box-shadow: 
-    0 4px 12px rgba(255, 111, 0, 0.15),
-    0 2px 6px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
 
@@ -439,13 +404,24 @@ body.sidebar-collapsed .content-area {
   background: white;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 
-    0 10px 40px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08);
-  margin-bottom: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: none;
+  margin-bottom: 0;
+  border: 1px solid #e8eaf6;
   position: relative;
   z-index: 1;
+}
+
+.inventario-table thead th:first-child {
+  border-top-left-radius: 14px;
+}
+
+.inventario-table thead th:last-child {
+  border-top-right-radius: 14px;
+}
+
+.inventario-table th:last-child,
+.inventario-table td:last-child {
+  text-align: right;
 }
 
 .inventario-table {
@@ -743,6 +719,28 @@ body.sidebar-collapsed .content-area {
   animation: modalSlideIn 0.35s ease;
 }
 
+.large-modal {
+  max-width: 980px;
+}
+
+.modal-header {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.modal-header h2 {
+  margin: 0 0 6px;
+  color: #1a237e;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.modal-subtitle {
+  margin: 0;
+  color: #546e7a;
+  font-size: 14px;
+}
+
 
 @keyframes modalSlideIn {
   from {
@@ -789,6 +787,38 @@ body.sidebar-collapsed .content-area {
 
 .modal-form {
   margin-top: 20px;
+}
+
+.grid-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-section {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px 22px;
+}
+
+.section-title {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #1a237e;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
 }
 
 .form-fields {
@@ -912,6 +942,10 @@ body.sidebar-collapsed .content-area {
 
 @media (max-width: 768px) {
   .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid {
     grid-template-columns: 1fr;
   }
   
