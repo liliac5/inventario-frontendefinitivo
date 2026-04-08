@@ -108,6 +108,16 @@ usuarioFiltro = '';
       }
     });
   }
+
+  getUsuarioNombreCompleto(usuario: Usuario | null | undefined): string {
+    if (!usuario) return 'N/A';
+    const nombre =
+      usuario.nombres_completos ||
+      usuario.nombreCompleto ||
+      usuario.nombre ||
+      '';
+    return String(nombre).trim() || 'N/A';
+  }
 mostrarMensaje(titulo: string, mensaje: string, tipo: 'error' | 'success') {
   this.tituloAlerta = titulo;
   this.mensajeAlerta = mensaje;
@@ -303,6 +313,7 @@ toggleEstadoAsignacion(asignacion: Asignacion): void {
     const d = typeof date === 'string' ? new Date(date) : date;
     return d.toLocaleDateString('es-ES');
   }
+
   
 openEditModal(asignacion: Asignacion): void {
   this.asignacionEditando = asignacion;

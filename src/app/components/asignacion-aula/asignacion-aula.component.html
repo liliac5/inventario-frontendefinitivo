@@ -92,8 +92,8 @@
           <table class="asignaciones-table">
             <thead>
               <tr>
-                <th>Usuario</th>
-                <th>Aula</th>
+                <th>Responsable</th>
+                <th>Aula fija</th>
                 <th>Fecha asignacion</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -101,7 +101,7 @@
             </thead>
            <tbody>
   <tr *ngFor="let asignacion of asignaciones">
-    <td>{{ asignacion.usuario.nombre }}</td>
+    <td>{{ getUsuarioNombreCompleto(asignacion.usuario) }}</td>
     <td>{{ asignacion.aula.nombre }} - {{ asignacion.aula.ubicacion }}</td>
 <td>
   {{ asignacion.fechaSolicitud | date:'dd/MM/yyyy' }}

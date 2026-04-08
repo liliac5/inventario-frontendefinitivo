@@ -22,6 +22,8 @@ export class InventarioComponent implements OnInit {
   tipoBien: '',
   claseBien: '',
   cuentaTipoBien: '',
+  tipoAdquisicion: '',
+  formaAdquisicion: '',
   codigoInventario: '',
   codigoSecap: '',
   descripcion: '',
@@ -38,7 +40,7 @@ export class InventarioComponent implements OnInit {
   provincia: '',
   observaciones: '',
   observaciones2: '',
-  origen: 'INVENTARIO',
+  origen: '',
   categoria: {
     idCategoria: null
   },
@@ -130,6 +132,8 @@ resetForm() {
     tipoBien: '',
     claseBien: '',
     cuentaTipoBien: '',
+    tipoAdquisicion: '',
+    formaAdquisicion: '',
     codigoInventario: '',
     codigoSecap: '',
     descripcion: '',
@@ -146,7 +150,7 @@ resetForm() {
     provincia: '',
     observaciones: '',
     observaciones2: '',
-    origen: 'INVENTARIO',
+    origen: '',
     categoria: { idCategoria: null },
     aula: { idAula: null }
   };
@@ -201,6 +205,8 @@ resetForm() {
     !b.tipoBien ||
     !b.claseBien ||
     !b.cuentaTipoBien ||
+    !b.tipoAdquisicion ||
+    !b.formaAdquisicion ||
     !b.codigoInventario ||
     !b.codigoSecap ||
     !b.estado ||
@@ -208,7 +214,8 @@ resetForm() {
     !b.provincia ||
     !b.valorCompraInicial ||
     !b.valorConIva ||
-    !b.categoria.idCategoria
+    !b.categoria.idCategoria ||
+    !b.origen
   ) {
     Swal.fire(
       'Campos incompletos',

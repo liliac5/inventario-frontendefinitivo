@@ -86,7 +86,8 @@ export class AuthService {
       console.log('Respuesta del backend:', response);
       
       // El backend puede devolver diferentes estructuras, intentamos varias opciones
-      const emailResponse = response.email || response.emailUsuario || response.cedula || cedula;
+      const cedulaResponse = response.cedula || response.email || response.emailUsuario || cedula;
+      const emailResponse = response.email || response.emailUsuario || '';
       const rolResponse = response.rol || response.role || response.idRol;
       const tokenResponse = response.token || response.jwt;
       const nombreResponse = response.nombre || response.nombreUsuario || '';
@@ -105,6 +106,7 @@ export class AuthService {
       const usuario: Usuario = {
         idUsuario: idUsuarioResponse,
         nombre: nombreResponse,
+        cedula: cedulaResponse,
         email: emailResponse,
         contraseña: '',
         estado: response.estado !== undefined ? response.estado : true,

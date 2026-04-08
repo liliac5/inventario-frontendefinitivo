@@ -291,5 +291,41 @@ export class ReportesComponent implements OnInit {
     this.showDetailModal = false;
     this.selectedReporte = null;
   }
+
+  descargarActa(reporte: Reporte): void {
+    const idReporte = reporte.idReporte || reporte.id_reporte;
+    if (!idReporte) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo identificar el reporte.',
+        confirmButtonColor: '#0d47a1'
+      });
+      return;
+    }
+
+    this.apiService.descargarActaReporte(idReporte).subscribe({
+      next: (blob: Blob) => {
+        this.downloadBlob(blob, `acta-reporte-${idReporte}.pdf`);
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo descargar el acta.',
+          confirmButtonColor: '#0d47a1'
+        });
+      }
+    });
+  }
+
+  private downloadBlob(blob: Blob, filename: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
 }
 

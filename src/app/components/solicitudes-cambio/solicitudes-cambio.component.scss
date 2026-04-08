@@ -449,12 +449,37 @@ body.sidebar-collapsed .content-area {
   box-shadow: 0 10px 24px rgba(198, 40, 40, 0.32);
 }
 
+.btn-acta {
+  background: linear-gradient(135deg, #ff8f00 0%, #ffb74d 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 18px rgba(255, 143, 0, 0.28);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-acta:hover {
+  background: linear-gradient(135deg, #ffa000 0%, #ffcc80 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(255, 143, 0, 0.32);
+}
+
 .acciones-td {
   width: 200px;
 }
 
 .btn-aceptar:focus-visible,
-.btn-rechazar:focus-visible {
+.btn-rechazar:focus-visible,
+.btn-acta:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.6);
   outline-offset: 2px;
 }

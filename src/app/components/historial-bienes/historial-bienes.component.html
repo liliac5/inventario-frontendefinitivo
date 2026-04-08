@@ -1,0 +1,41 @@
+<div class="historial-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 class="welcome">Historial de Bienes</h1>
+    </div>
+
+    <div class="content-card">
+      <div class="table-container">
+        <table class="historial-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Acción</th>
+              <th>Código Bien</th>
+              <th>Nombre Bien</th>
+              <th>Usuario Asignado</th>
+              <th>Aula Asignada</th>
+              <th>Motivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of historial">
+              <td>{{ item.fecha | date:'short' }}</td>
+              <td>{{ item.accion }}</td>
+              <td>{{ item.codigoBien || 'N/A' }}</td>
+              <td>{{ item.nombreBien || 'N/A' }}</td>
+              <td>{{ item.nombreUsuario || 'Sin asignar' }}</td>
+              <td>{{ item.nombreAula || 'Sin aula' }}</td>
+              <td>{{ item.motivo || 'N/A' }}</td>
+            </tr>
+            <tr *ngIf="!loading && historial.length === 0">
+              <td colspan="7" class="no-data">No hay historial registrado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

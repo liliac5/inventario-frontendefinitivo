@@ -83,32 +83,48 @@ post<T>(endpoint: string, body: any): Observable<T> {
 
   // ✅ AULAS (ESTE ES EL IMPORTANTE)
   getAulas(): Observable<Aula[]> {
-    return this.http.get<Aula[]>(`${this.baseUrl}/aulas`);
+    return this.http.get<Aula[]>(`${this.baseUrl}/aulas`, {
+      headers: this.getHeaders()
+    });
   }
 
  
 
   // Asignaciones
   getAsignaciones(): Observable<Asignacion[]> {
-    return this.http.get<Asignacion[]>(`${this.baseUrl}/asignaciones`);
+    return this.http.get<Asignacion[]>(`${this.baseUrl}/asignaciones`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  // Acta PDF de asignación
+  getAsignacionActaPdf(id: number) {
+    return this.http.get(
+      `${this.baseUrl}/asignaciones/${id}/acta`,
+      { headers: this.getHeaders(), responseType: 'blob' }
+    );
   }
 
   createAsignacion(data: { idAula: number; idUsuario: number }) {
   return this.http.post<Asignacion>(
     `${this.baseUrl}/asignaciones`,
-    data
+    data,
+    { headers: this.getHeaders() }
   );
 }
 
   updateAsignacion(id: number, body: any) {
   return this.http.put<Asignacion>(
     `${this.baseUrl}/asignaciones/${id}`,
-    body
+    body,
+    { headers: this.getHeaders() }
   );
 }
 
   deleteAsignacion(id: number) {
-  return this.http.delete(`${this.baseUrl}/asignaciones/${id}`);
+  return this.http.delete(`${this.baseUrl}/asignaciones/${id}`, {
+    headers: this.getHeaders()
+  });
 }
 
 
@@ -134,6 +150,14 @@ getSolicitudesDocente(idDocente: number) {
     { headers: this.getHeaders() }
   );
 }
+
+  // Acta PDF de solicitud
+  getSolicitudActaPdf(id: number) {
+    return this.http.get(
+      `${this.baseUrl}/solicitudes/${id}/acta`,
+      { headers: this.getHeaders(), responseType: 'blob' }
+    );
+  }
 
    //solicitudes denegar o aprobar
    aprobarSolicitud(id: number) {
@@ -202,7 +226,37 @@ denegarSolicitud(id: number) {
 }
 
   getBienes(): Observable<Bien[]> {
-    return this.http.get<Bien[]>(`${this.baseUrl}/bienes`);
+    return this.http.get<Bien[]>(`${this.baseUrl}/bienes`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  getHistorialBienes(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/historial-bienes`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  descargarActaSolicitud(id: number) {
+    return this.http.get(`${this.baseUrl}/actas/solicitudes/${id}`, {
+      responseType: 'blob',
+      headers: this.getHeaders()
+    });
+  }
+
+  descargarActaReporte(id: number) {
+    return this.http.get(`${this.baseUrl}/actas/reportes/${id}`, {
+      responseType: 'blob',
+      headers: this.getHeaders()
+    });
+  }
+
+  generarActaAsignacionBien(idBien: number, motivo: string) {
+    return this.http.post(`${this.baseUrl}/actas/bienes/${idBien}/asignacion`, { motivo }, {
+      responseType: 'blob',
+      headers: this.getHeaders()
+    });
   }
 
   deleteUsuario(id: number): Observable<void> {

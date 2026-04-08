@@ -69,18 +69,20 @@ export class ReportesDocenteComponent implements OnInit {
       this.currentUser = user.nombre || 'Docente';
       this.currentUserId = user.idUsuario;
       
-      if (this.currentUserId === 0 && user.email) {
-        this.obtenerIdUsuarioPorEmail(user.email);
+      if (this.currentUserId === 0 && (user.cedula || user.email)) {
+        this.obtenerIdUsuarioPorCedula(user.cedula || user.email);
       } else {
         this.loadAsignaciones();
       }
     }
   }
 
-  obtenerIdUsuarioPorEmail(email: string): void {
+  obtenerIdUsuarioPorCedula(cedula: string): void {
     this.apiService.getUsuarios().subscribe({
       next: (usuarios) => {
-        const usuarioEncontrado = usuarios.find(u => u.email === email);
+        const usuarioEncontrado = usuarios.find(u =>
+          u.cedula === cedula || u.email === cedula
+        );
         if (usuarioEncontrado && usuarioEncontrado.idUsuario) {
           this.currentUserId = usuarioEncontrado.idUsuario;
           const user = this.authService.getCurrentUser();
@@ -471,6 +473,32 @@ export class ReportesDocenteComponent implements OnInit {
   closeDetailModal(): void {
     this.showDetailModal = false;
     this.selectedReporte = null;
+  }
+
+  descargarActa(reporte: Reporte): void {
+    const idReporte = reporte.idReporte || reporte.id_reporte;
+    if (!idReporte) {
+      Swal.fire('Error', 'No se pudo identificar el reporte.', 'error');
+      return;
+    }
+
+    this.apiService.descargarActaReporte(idReporte).subscribe({
+      next: (blob: Blob) => {
+        this.downloadBlob(blob, `acta-reporte-${idReporte}.pdf`);
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo descargar el acta.', 'error');
+      }
+    });
+  }
+
+  private downloadBlob(blob: Blob, filename: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 }
 

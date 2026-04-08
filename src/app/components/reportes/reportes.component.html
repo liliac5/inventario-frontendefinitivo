@@ -77,6 +77,7 @@
               <td>{{ reporte.detalleProblema }}</td>
               <td>
                 <button class="view-link" (click)="viewDetails(reporte)">Ver</button>
+                <button class="acta-link" (click)="descargarActa(reporte)">Acta PDF</button>
               </td>
             </tr>
             <tr *ngIf="filteredReportes.length === 0">

@@ -28,6 +28,7 @@ export class SidebarComponent implements OnInit {
     { route: '/usuarios', label: 'Gestión de Usuarios', roles: [1] },
     // Menú para Admin y Coordinador
     { route: '/inventario', label: 'Inventario', roles: [1, 2] },
+    { route: '/historial-bienes', label: 'Historial de Bienes', roles: [1, 2] },
     { route: '/asignacion-aula', label: 'Asignación de Aula', roles: [1, 2] },
     { route: '/solicitudes-cambio', label: 'Solicitudes de Cambio', roles: [1, 2] },
     { route: '/reportes', label: 'Reportes', roles: [1, 2] },

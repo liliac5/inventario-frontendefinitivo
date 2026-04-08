@@ -53,9 +53,9 @@ toastType: 'success' | 'error' = 'success';
     this.currentUser = user.nombre || 'Docente';
     this.currentUserId = user.idUsuario;
     
-    // Si el idUsuario es 0, intentar obtener el ID real del usuario por email
-    if (this.currentUserId === 0 && user.email) {
-      this.obtenerIdUsuarioPorEmail(user.email);
+    // Si el idUsuario es 0, intentar obtener el ID real del usuario por cédula
+    if (this.currentUserId === 0 && (user.cedula || user.email)) {
+      this.obtenerIdUsuarioPorCedula(user.cedula || user.email);
     } else {
       this.loadAsignaciones();
     }
@@ -76,10 +76,12 @@ showToastMessage(message: string, type: 'success' | 'error' = 'success') {
 closeToast() {
   this.showToast = false;
 }
-obtenerIdUsuarioPorEmail(email: string): void {
+obtenerIdUsuarioPorCedula(cedula: string): void {
   this.apiService.getUsuarios().subscribe({
     next: (usuarios) => {
-      const usuarioEncontrado = usuarios.find(u => u.email === email);
+      const usuarioEncontrado = usuarios.find(u =>
+        u.cedula === cedula || u.email === cedula
+      );
       if (usuarioEncontrado && usuarioEncontrado.idUsuario) {
         this.currentUserId = usuarioEncontrado.idUsuario;
         console.log('✅ ID de usuario actualizado:', this.currentUserId);

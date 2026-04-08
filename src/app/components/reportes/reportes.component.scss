@@ -424,6 +424,29 @@ body.sidebar-collapsed .content-area {
   box-shadow: 0 10px 24px rgba(13, 71, 161, 0.3);
 }
 
+.acta-link {
+  background: linear-gradient(135deg, #ff8f00 0%, #ffb74d 100%);
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  margin-left: 8px;
+  box-shadow: 0 6px 14px rgba(255, 143, 0, 0.25);
+}
+
+.acta-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(255, 143, 0, 0.3);
+}
+
 // Modal Styles
 .modal-overlay {
   position: fixed;

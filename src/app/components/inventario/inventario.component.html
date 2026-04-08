@@ -208,6 +208,29 @@
       </div>
 
       <div class="form-section">
+        <h3 class="section-title">Adquisición</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Tipo de adquisición</label>
+            <select [(ngModel)]="nuevoBien.tipoAdquisicion" name="tipoAdquisicion" required>
+              <option value="">Seleccione</option>
+              <option>Donado</option>
+              <option>Comprado</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Forma de adquisición</label>
+            <select [(ngModel)]="nuevoBien.formaAdquisicion" name="formaAdquisicion" required>
+              <option value="">Seleccione</option>
+              <option>Transferencia gratuita</option>
+              <option>Donación</option>
+              <option>Compra</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
         <h3 class="section-title">Detalles técnicos</h3>
         <div class="form-grid">
           <div class="form-field">
@@ -251,6 +274,16 @@
             <label>Valor con IVA</label>
             <input type="number" [(ngModel)]="nuevoBien.valorConIva"
                    name="valorConIva" placeholder="952" required>
+          </div>
+
+          <div class="form-field">
+            <label>Origen del bien</label>
+            <select [(ngModel)]="nuevoBien.origen" name="origen" required>
+              <option value="">Seleccione</option>
+              <option value="COMPRADO">Comprado</option>
+              <option value="DONACION">Donación</option>
+              <option value="TRANSFERENCIA_GRATUITA">Transferencia gratuita</option>
+            </select>
           </div>
 
           <div class="form-field">
@@ -402,111 +435,217 @@
 <div class="modal-overlay" *ngIf="showDetailModal">
   <div class="modal-content large-modal">
 
-    <h2>Editar Bien</h2>
+    <div class="modal-header">
+      <h2>Editar Bien</h2>
+      <p class="modal-subtitle">Actualice la información del bien.</p>
+    </div>
 
     <form class="modal-form grid-form" (ngSubmit)="updateBien()">
+      <div class="form-section">
+        <h3 class="section-title">Identificación</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Código del bien</label>
+            <input type="text" [(ngModel)]="selectedBien.codigoBien"
+                   name="codigoBienEdit" required>
+          </div>
 
-      <div class="form-field">
-        <label>Código</label>
-        <input type="text" [(ngModel)]="selectedBien.codigoBien"
-               name="codigoBienEdit" required>
+          <div class="form-field">
+            <label>Código inventario</label>
+            <input type="text" [(ngModel)]="selectedBien.codigoInventario"
+                   name="codigoInventarioEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Código SECAP</label>
+            <input type="text" [(ngModel)]="selectedBien.codigoSecap"
+                   name="codigoSecapEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Cuenta tipo bien</label>
+            <input type="text" [(ngModel)]="selectedBien.cuentaTipoBien"
+                   name="cuentaTipoBienEdit" required>
+          </div>
+        </div>
       </div>
 
-      <div class="form-field">
-        <label>Nombre</label>
-        <input type="text" [(ngModel)]="selectedBien.nombreBien"
-               name="nombreBienEdit" required>
+      <div class="form-section">
+        <h3 class="section-title">Datos del bien</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Nombre del bien</label>
+            <input type="text" [(ngModel)]="selectedBien.nombreBien"
+                   name="nombreBienEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Tipo de bien</label>
+            <input type="text" [(ngModel)]="selectedBien.tipoBien"
+                   name="tipoBienEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Clase del bien</label>
+            <input type="text" [(ngModel)]="selectedBien.claseBien"
+                   name="claseBienEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Categoría</label>
+            <select [(ngModel)]="selectedBien.categoria.idCategoria"
+                    name="categoriaEdit"
+                    required>
+              <option [ngValue]="null">Seleccione una categoría</option>
+              <option *ngFor="let c of categorias" [ngValue]="c.idCategoria">
+                {{ c.nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="form-field">
-        <label>Tipo</label>
-        <input type="text" [(ngModel)]="selectedBien.tipoBien"
-               name="tipoBienEdit">
+      <div class="form-section">
+        <h3 class="section-title">Detalles técnicos</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Marca</label>
+            <input type="text" [(ngModel)]="selectedBien.marca"
+                   name="marcaEdit">
+          </div>
+
+          <div class="form-field">
+            <label>Modelo</label>
+            <input type="text" [(ngModel)]="selectedBien.modelo"
+                   name="modeloEdit">
+          </div>
+
+          <div class="form-field">
+            <label>Serie</label>
+            <input type="text" [(ngModel)]="selectedBien.serie"
+                   name="serieEdit">
+          </div>
+
+          <div class="form-field full-width">
+            <label>Especificaciones</label>
+            <textarea [(ngModel)]="selectedBien.especificaciones"
+                      name="especificacionesEdit"
+                      rows="3"></textarea>
+          </div>
+        </div>
       </div>
 
-      <div class="form-field">
-        <label>Clase</label>
-        <input type="text" [(ngModel)]="selectedBien.claseBien"
-               name="claseBienEdit">
+      <div class="form-section">
+        <h3 class="section-title">Valores y ubicación</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Valor compra</label>
+            <input type="number"
+                   [(ngModel)]="selectedBien.valorCompraInicial"
+                   name="valorCompraEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Valor con IVA</label>
+            <input type="number"
+                   [(ngModel)]="selectedBien.valorConIva"
+                   name="valorConIvaEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Origen del bien</label>
+            <select [(ngModel)]="selectedBien.origen" name="origenEdit" required>
+              <option value="">Seleccione</option>
+              <option value="COMPRADO">Comprado</option>
+              <option value="DONACION">Donación</option>
+              <option value="TRANSFERENCIA_GRATUITA">Transferencia gratuita</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label>Estado</label>
+            <select [(ngModel)]="selectedBien.estado" name="estadoEdit" required>
+              <option value="">Seleccione</option>
+              <option>Disponible</option>
+              <option>Asignado</option>
+              <option>En Mantenimiento</option>
+              <option>Dañado</option>
+              <option>Baja</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label>Detalle del Estado</label>
+            <input type="text" [(ngModel)]="selectedBien.detalleEstado"
+                   name="detalleEstadoEdit">
+          </div>
+
+          <div class="form-field">
+            <label>Ubicación</label>
+            <input type="text" [(ngModel)]="selectedBien.ubicacion"
+                   name="ubicacionEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Provincia</label>
+            <input type="text" [(ngModel)]="selectedBien.provincia"
+                   name="provinciaEdit" required>
+          </div>
+
+          <div class="form-field">
+            <label>Custodio</label>
+            <input type="text"
+                   [(ngModel)]="selectedBien.custodio"
+                   name="custodioEdit"
+                   placeholder="Nombre del custodio">
+          </div>
+
+          <div class="form-field">
+            <label>Aula (solo asignadas)</label>
+            <select
+              [(ngModel)]="selectedBien.aula.idAula"
+              name="aulaEdit"
+              (change)="onAulaSeleccionada(selectedBien.aula.idAula)"
+            >
+              <option [ngValue]="null">Seleccione aula</option>
+              <option *ngFor="let a of aulasAsignadas"
+                      [ngValue]="a.idAula">
+                {{ a.nombreAula }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="form-field">
-        <label>Cuenta</label>
-        <input type="text" [(ngModel)]="selectedBien.cuentaTipoBien"
-               name="cuentaTipoBienEdit">
-      </div>
+      <div class="form-section">
+        <h3 class="section-title">Observaciones</h3>
+        <div class="form-grid">
+          <div class="form-field full-width">
+            <label>Descripción</label>
+            <textarea [(ngModel)]="selectedBien.descripcion"
+                      name="descripcionEdit"
+                      rows="3"></textarea>
+          </div>
 
-      <div class="form-field">
-        <label>Estado</label>
-        <select [(ngModel)]="selectedBien.estado"
-                name="estadoEdit">
-          <option>Disponible</option>
-          <option>Asignado</option>
-          <option>En Mantenimiento</option>
-          <option>Dañado</option>
-          <option>Baja</option>
-        </select>
-      </div>
+          <div class="form-field full-width">
+            <label>Observaciones</label>
+            <textarea [(ngModel)]="selectedBien.observaciones"
+                      name="observacionesEdit"
+                      rows="3"></textarea>
+          </div>
 
-      <div class="form-field">
-        <label>Ubicación</label>
-        <input type="text" [(ngModel)]="selectedBien.ubicacion"
-               name="ubicacionEdit">
-      </div>
-
-      <div class="form-field">
-        <label>Provincia</label>
-        <input type="text" [(ngModel)]="selectedBien.provincia"
-               name="provinciaEdit">
-      </div>
-
-      <div class="form-field">
-        <label>Custodio</label>
-        <input type="text"
-               [(ngModel)]="selectedBien.custodio"
-               name="custodioEdit"
-               placeholder="Nombre del custodio">
-      </div>
-
-      <div class="form-field">
-        <label>Valor compra</label>
-        <input type="number"
-               [(ngModel)]="selectedBien.valorCompraInicial"
-               name="valorCompraEdit">
-      </div>
-
-      <div class="form-field">
-        <label>Valor con IVA</label>
-        <input type="number"
-               [(ngModel)]="selectedBien.valorConIva"
-               name="valorConIvaEdit">
-      </div>
-
-      <div class="form-field">
-  <label>Aula</label>
- <select
-  [(ngModel)]="selectedBien.aula.idAula"
-  name="aulaEdit"
-  (change)="onAulaSeleccionada(selectedBien.aula.idAula)"
->
-  <option [ngValue]="null">Seleccione aula</option>
-
-  <option *ngFor="let a of aulasAsignadas"
-          [ngValue]="a.idAula">
-    {{ a.nombreAula }}
-  </option>
-</select>
-</div>
-
-      <div class="form-field full-width">
-        <label>Observaciones</label>
-        <textarea [(ngModel)]="selectedBien.observaciones"
-                  name="observacionesEdit"></textarea>
+          <div class="form-field full-width">
+            <label>Observaciones Adicionales</label>
+            <textarea [(ngModel)]="selectedBien.observaciones2"
+                      name="observaciones2Edit"
+                      rows="3"></textarea>
+          </div>
+        </div>
       </div>
 
       <div class="modal-actions full-width">
-        <button type="submit" class="btn-save" >Guardar cambios</button>
-        <button type="button"class="btn-cancel" (click)="closeDetailModal()">Cancelar</button>
+        <button type="submit" class="btn-save">Guardar cambios</button>
+        <button type="button" class="btn-cancel" (click)="closeDetailModal()">Cancelar</button>
       </div>
 
     </form>

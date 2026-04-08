@@ -11,6 +11,8 @@ export interface Bien {
   tipo_bien: string;
   clase_bien: string;
   cuenta_tipo_bien: string;
+  tipo_adquisicion?: string;
+  forma_adquisicion?: string;
   marca: string;
   modelo: string;
   serie: string;

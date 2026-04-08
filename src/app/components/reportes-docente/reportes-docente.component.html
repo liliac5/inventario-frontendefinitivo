@@ -122,9 +122,14 @@
                     <span [title]="reporte.detalleProblema || reporte.detalle_problema || 'Sin detalle'">
                       {{ truncateText(reporte.detalleProblema || reporte.detalle_problema || '', 60) || '-' }}
                     </span>
-                    <button class="view-detail-btn" (click)="viewDetails(reporte)" title="Ver detalles">
-                      Ver
-                    </button>
+                    <div class="detalle-actions">
+                      <button class="view-detail-btn" (click)="viewDetails(reporte)" title="Ver detalles">
+                        Ver
+                      </button>
+                      <button class="acta-link" (click)="descargarActa(reporte)" title="Descargar acta">
+                        Acta PDF
+                      </button>
+                    </div>
                   </td>
                 </tr>
                 <tr *ngIf="misReportes.length === 0">

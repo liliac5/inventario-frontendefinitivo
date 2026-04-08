@@ -17,6 +17,7 @@ import { MiAulaAsignadaComponent } from './components/mi-aula-asignada/mi-aula-a
 import { ReportesDocenteComponent } from './components/reportes-docente/reportes-docente.component';
 import { routes } from './app.routes';
 import { InventarioComponent } from './components/inventario/inventario.component';
+import { HistorialBienesComponent } from './components/historial-bienes/historial-bienes.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { InventarioComponent } from './components/inventario/inventario.componen
     PortalDocenteComponent,
     MiAulaAsignadaComponent,
     ReportesDocenteComponent,
-    InventarioComponent
+    InventarioComponent,
+    HistorialBienesComponent
   ],
   imports: [
     BrowserModule,

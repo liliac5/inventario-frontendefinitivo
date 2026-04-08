@@ -70,6 +70,23 @@ export class SolicitudesCambioComponent implements OnInit {
     this.selectedSolicitud = null;
   }
 
+  descargarActa(solicitud: Solicitud): void {
+    const idSolicitud = solicitud.idSolicitud;
+    if (!idSolicitud) {
+      Swal.fire('Error', 'No se pudo identificar la solicitud.', 'error');
+      return;
+    }
+
+    this.apiService.descargarActaSolicitud(idSolicitud).subscribe({
+      next: (blob: Blob) => {
+        this.downloadBlob(blob, `acta-solicitud-${idSolicitud}.pdf`);
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo descargar el acta.', 'error');
+      }
+    });
+  }
+
   openConfirmModal(solicitud: Solicitud, action: 'aceptar' | 'rechazar'): void {
     this.solicitudToProcess = solicitud;
     this.confirmAction = action;
@@ -159,6 +176,15 @@ showSuccessMessage(message: string): void {
     hideClass: { popup: 'animate__animated animate__fadeOutUp' }
   });
 }
+
+  private downloadBlob(blob: Blob, filename: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
 
   closeSuccessMessage(): void {
     this.showSuccessToast = false;

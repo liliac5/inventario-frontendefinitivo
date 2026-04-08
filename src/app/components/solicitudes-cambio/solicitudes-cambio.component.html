@@ -67,6 +67,13 @@
 <td>
   <div class="acciones-cell">
     <button
+      class="btn-acta"
+      *ngIf="solicitud.estado === 'APROBADA'"
+      (click)="descargarActa(solicitud)">
+      Acta PDF
+    </button>
+
+    <button
       class="btn-aceptar"
       *ngIf="solicitud.estado === 'PENDIENTE'"
       (click)="accionConAnimacion(solicitud, 'aceptar')">
